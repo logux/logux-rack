@@ -10,7 +10,7 @@ describe Logux::ClassFinder do
     subject(:class_name) { finder.class_name }
 
     let(:action) do
-      create(:logux_actions_add, type: 'test/test/name/try/user/add')
+      create(:logux_action_add, type: 'test/test/name/try/user/add')
     end
 
     it 'returns nested classes' do
@@ -22,7 +22,7 @@ describe Logux::ClassFinder do
     subject(:policy_class) { finder.find_policy_class }
 
     context 'with unknown action' do
-      let(:action) { create(:logux_actions_unknown) }
+      let(:action) { create(:logux_action_unknown) }
 
       it 'raise an error for unknown action error' do
         expect { policy_class }.to raise_error(Logux::UnknownActionError)
@@ -30,7 +30,7 @@ describe Logux::ClassFinder do
     end
 
     context 'with unknown subscribe' do
-      let(:action) { create(:logux_actions_unknown_subscribe) }
+      let(:action) { create(:logux_action_unknown_subscribe) }
 
       it 'raise an error for unknown action error' do
         expect { policy_class }.to raise_error(Logux::UnknownChannelError)
@@ -42,7 +42,7 @@ describe Logux::ClassFinder do
     subject(:action_class) { finder.find_action_class }
 
     context 'with unknown action' do
-      let(:action) { create(:logux_actions_unknown) }
+      let(:action) { create(:logux_action_unknown) }
 
       it 'raise an error for unknown action error' do
         expect { action_class }.to raise_error(Logux::UnknownActionError)
@@ -50,7 +50,7 @@ describe Logux::ClassFinder do
     end
 
     context 'with unknown subscribe' do
-      let(:action) { create(:logux_actions_unknown_subscribe) }
+      let(:action) { create(:logux_action_unknown_subscribe) }
 
       it 'raise an error for unknown action error' do
         expect { action_class }.to raise_error(Logux::UnknownChannelError)

@@ -6,15 +6,15 @@ module Logux
       merge!(source_hash.stringify_keys)
 
       self['id'] ||= Logux.generate_action_id
-      self['time'] ||= self['id'].split(' ').first
+      self['time'] ||= self['id'].split(' ')[0]
     end
 
     def node_id
-      id.split(' ').second
+      id.split(' ')[1]
     end
 
     def user_id
-      node_id.split(':').first
+      node_id.split(':')[0]
     end
 
     def client_id

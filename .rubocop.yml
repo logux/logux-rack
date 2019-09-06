@@ -12,7 +12,7 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
-    - 'logux_rails.gemspec'
+    - 'logux-rack.gemspec'
     - 'lib/logux/test/helpers.rb'
 
 RSpec/DescribeClass:

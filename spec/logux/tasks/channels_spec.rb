@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 
-describe 'rake logux:channels', type: :task do
-  subject(:task) { Rake::Task['logux:channels'] }
+describe 'rake logux:channels' do
+  include_context 'with rake'
 
-  it 'preloads the Rails environment' do
-    expect(task.prerequisites).to include 'environment'
+  subject(:task) { -> { Rake::Task[task_name].invoke(path) } }
+
+  let(:path) { "#{Dir.pwd}/**/dummy/app/logux" }
+
+  let(:channels_list) do
+    [
+      "channel Class\n",
+      "   post Channels::Post\n"
+    ].join
   end
 
   it 'outputs all channels and corresponding class names' do
-    expect { task.execute }.to output(
-      /post Channels::Post/
-    ).to_stdout
+    expect { task.call }.to output(channels_list).to_stdout
   end
 end

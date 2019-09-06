@@ -1,17 +1,25 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 
-describe 'rake logux:actions', type: :task do
-  subject(:task) { Rake::Task['logux:actions'] }
+describe 'rake logux:actions' do
+  include_context 'with rake'
 
-  it 'preloads the Rails environment' do
-    expect(task.prerequisites).to include 'environment'
+  subject(:task) { -> { Rake::Task[task_name].invoke(path) } }
+
+  let(:path) { "#{Dir.pwd}/**/logux/actions" }
+
+  let(:actions_list) do
+    [
+      "   action.type Class#method\n",
+      "blog/notes/add Actions::Blog::Notes#add\n",
+      "   comment/add Actions::Comment#add\n",
+      "   post/rename Actions::Post#rename\n",
+      "    post/touch Actions::Post#touch\n"
+    ].join
   end
 
   it 'outputs all action types and corresponding class and method names' do
-    expect { task.execute }.to output(
-      %r{blog/notes/add Actions::Blog::Notes#add}
-    ).to_stdout
+    expect { task.call }.to output(actions_list).to_stdout
   end
 end

@@ -11,16 +11,20 @@ module Logux
       end
 
       def call
-        authed = Logux.configuration.auth_rule.call(user_id, chunk.credentials)
-        return stream.write(['authenticated', chunk.auth_id]) if authed
-
-        stream.write(['denied', chunk.auth_id])
+        stream.write([auth_result, chunk.auth_id])
       end
+
+      AUTHENTICATED = 'authenticated'
+      DENIED = 'denied'
 
       private
 
-      def user_id
-        chunk.node_id.split(':').first
+      def auth_result
+        auth_rule(chunk.user_id, chunk.credentials) ? AUTHENTICATED : DENIED
+      end
+
+      def auth_rule(user_id, credentials)
+        Logux.configuration.auth_rule.call(user_id, credentials)
       end
     end
   end

@@ -1,8 +1,8 @@
-# Logux Rails
+# Logux::Rack
 
-[![Build Status](https://travis-ci.org/logux/logux_rails.svg?branch=master)](https://travis-ci.org/logux/logux_rails) [![Coverage Status](https://coveralls.io/repos/github/logux/logux_rails/badge.svg?branch=master)](https://coveralls.io/github/logux/logux_rails?branch=master)
+[![Build Status](https://travis-ci.org/logux/logux-rack.svg?branch=master)](https://travis-ci.org/logux/logux-rack) [![Coverage Status](https://coveralls.io/repos/github/logux/logux-rack/badge.svg?branch=master)](https://coveralls.io/github/logux/logux-rack?branch=master)
 
-Add WebSockets, live-updates and offline-first to Ruby on Rails with [Logux](https://github.com/logux/logux/). This gem will add [Logux Back-end Protocol](https://github.com/logux/logux/blob/master/backend-protocol/spec.md) to Ruby on Rails and then you can use Logux Server as a proxy between WebSocket and your Rails application.
+Add WebSockets, live-updates and offline-first to any Rack-based application with [Logux](https://github.com/logux/logux/). It adds [Logux Back-end Protocol](https://github.com/logux/logux/blob/master/backend-protocol/spec.md) support to Ruby on Rails or any other Rack applications, so you can use Logux Server as a proxy between WebSocket and your web application.
 
 Read [Creating Logux Proxy](https://github.com/logux/logux/blob/master/2-starting/2-creating-proxy.md) guide.
 
@@ -11,7 +11,7 @@ Read [Creating Logux Proxy](https://github.com/logux/logux/blob/master/2-startin
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'logux_rails'
+gem 'logux-rack'
 ```
 
 And then execute:
@@ -22,7 +22,28 @@ bundle
 
 ## Usage
 
-First of all, you have to configure Logux, by defining server address in, for example, `config/initializers/logux.rb`:
+Here is a minimal Rack configuration to start new `Logux::Rack` server:
+
+```ruby
+# config.ru
+require 'logux/rack'
+
+run Logux.application
+```
+
+Note that the HTTP response streaming depends on the web server used to serve the application. Use a server with streaming capability. [Puma](https://puma.io/), for instance:
+
+```bash
+gem install puma
+```
+
+Start the server:
+
+```bash
+puma config.ru
+```
+
+It is possible to mount `Logux::Rack` server within an existing Rails application. First of all, you will need to configure Logux by defining a server address in an initializer. For example, `config/initializers/logux.rb`:
 
 ```ruby
 Logux.configuration do |config|
@@ -30,17 +51,54 @@ Logux.configuration do |config|
 end
 ```
 
-Mount logux in routes:
+Mount `Logux::Rack` in routes:
 
 ```ruby
-  mount Logux::Engine => '/'
+Rails.application.routes.draw do
+  mount Logux::Rack::App => '/'
+end
 ```
 
 After this, POST requests to `/logux` will be processed by `LoguxController`. You can redefine it or inherit from, if it necessary, for example, for implementing custom authorization flow.
 
-Logux Rails will try to find Action for the specific message from Logux Server. For example, for `project/rename` action, you should define `Action::Project` class, inherited from `Logux::Action` base class, and implement `rename` method.
+Here is another routing example for [Roda](https://github.com/jeremyevans/roda)application routing:
 
-You can execute `rake logux:actions` to get the list of available action types, or `rake logux:channels` to get the list of available channels.
+```ruby
+class MyApp < Roda
+  route do |r|
+    r.is 'logux' { r.run Logux::Rack::App }
+  end
+end
+```
+
+[Hanami](https://hanamirb.org/) configuration example:
+
+```ruby
+# config/environment.rb
+Hanami.configure do
+  mount Logux::Rack::App, at: '/'
+end
+```
+
+`Logux::Rack` can also be embedded into another Rack application using [Rack::Builder](https://www.rubydoc.info/gems/rack/Rack/Builder):
+
+```ruby
+# config.ru
+
+require 'logux/rack'
+
+app = Rack::Builder.new do
+  use Rack::CommonLogger
+  map '/logux' { run Logux::Rack::App }
+  # ...
+end
+
+run app
+```
+
+`Logux::Rack` will try to find Action for the specific message from Logux Server. For example, for `project/rename` action, you should define `Action::Project` class, inherited from `Logux::Action` base class, and implement `rename` method.
+
+You can execute `rake logux:actions` to get the list of available action types, or `rake logux:channels` to get the list of available channels. Use optional path parameter to limit the search scope: `rake logux:actions[lib/logux/actions]`
 
 ## Development with Docker
 
@@ -48,13 +106,12 @@ After checking out the repo, run:
 
 ```bash
 docker-compose run app bundle install
-docker-compose run app bundle exec appraisal install
 ```
 
 Run tests with:
 
 ```bash
-docker-compose run app bundle exec appraisal rspec
+docker-compose run app bundle exec rspec
 ```
 
 Run RuboCop with:

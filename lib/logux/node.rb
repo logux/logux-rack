@@ -2,7 +2,7 @@
 
 module Logux
   class Node
-    include Singleton
+    include ::Singleton
 
     attr_accessor :last_time, :sequence
     attr_writer :node_id

@@ -16,7 +16,7 @@ module Logux
 
     def since_time
       @since_time ||= begin
-        since = action['since'].try(:[], 'time')
+        since = action[:since]&.send(:[], :time)
         Time.at(since).to_datetime if since
       end
     end

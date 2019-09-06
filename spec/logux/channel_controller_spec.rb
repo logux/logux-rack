@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Logux::ChannelController do
   let(:controller_class) do
-    FakeController = Class.new(described_class) do
+    Class.new(described_class) do
       def initial_data
         [{ type: 'action' }]
       end
@@ -17,7 +17,7 @@ describe Logux::ChannelController do
   describe '#subscribe' do
     subject(:subscribe) { channel_controller.subscribe }
 
-    let(:action) { create(:logux_actions_subscribe) }
+    let(:action) { create(:logux_action_subscribe) }
 
     context 'when ActiveRecord defined' do
       it 'tries to find record by chanel data' do
@@ -30,7 +30,7 @@ describe Logux::ChannelController do
     subject(:since_time) { channel_controller.since_time }
 
     context 'when action.since defined' do
-      let(:action) { create(:logux_actions_subscribe_since) }
+      let(:action) { create(:logux_action_subscribe_since) }
 
       it 'tries to find record by chanel data' do
         expect(since_time).to eql(Time.at(100).to_datetime)
@@ -38,11 +38,21 @@ describe Logux::ChannelController do
     end
 
     context 'when action.since not defined' do
-      let(:action) { create(:logux_actions_subscribe) }
+      let(:action) { create(:logux_action_subscribe) }
 
       it 'tries to find record by chanel data' do
         expect(since_time).to be_nil
       end
+    end
+  end
+
+  describe '#initial_data' do
+    let(:action) { create(:logux_action_subscribe) }
+    let(:empty_controller_class) { Class.new(described_class) }
+    let(:empty_controller) { empty_controller_class.new(action: action) }
+
+    it 'is empty' do
+      expect(empty_controller.initial_data).to eq []
     end
   end
 end

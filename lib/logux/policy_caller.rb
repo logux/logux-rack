@@ -2,9 +2,11 @@
 
 module Logux
   class PolicyCaller
+    extend Forwardable
+
     attr_reader :action, :meta
 
-    delegate :logger, :configuration, to: :Logux
+    def_delegators :Logux, :logger, :configuration
 
     def initialize(action:, meta:)
       @action = action

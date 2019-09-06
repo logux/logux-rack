@@ -9,7 +9,7 @@ describe Logux::PolicyCaller do
   let(:meta) { {} }
 
   context 'when request is not verified' do
-    let(:action) { create(:logux_actions_unknown) }
+    let(:action) { create(:logux_action_unknown) }
 
     before do
       Logux.configuration.verify_authorized = false
@@ -31,7 +31,7 @@ describe Logux::PolicyCaller do
     end
 
     context 'with unknown action' do
-      let(:action) { create(:logux_actions_unknown) }
+      let(:action) { create(:logux_action_unknown) }
 
       it 'raises an unknownActionError' do
         expect { call! }.to raise_error(Logux::UnknownActionError)
@@ -39,7 +39,7 @@ describe Logux::PolicyCaller do
     end
 
     context 'with unknown subscribe' do
-      let(:action) { create(:logux_actions_unknown_subscribe) }
+      let(:action) { create(:logux_action_unknown_subscribe) }
 
       it 'raises an unknownActionError' do
         expect { call! }.to raise_error(Logux::UnknownChannelError)

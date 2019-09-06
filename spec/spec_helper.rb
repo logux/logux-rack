@@ -14,18 +14,21 @@ SimpleCov.start do
 end
 
 require 'bundler/setup'
+Bundler.setup
+
 require 'factory_bot'
-require 'logux_rails'
-require 'webmock/rspec'
-require 'timecop'
+require 'logux/rack'
 require 'pry-byebug'
-require 'rspec/live_controllers'
+require 'rack/test'
+require 'rake'
+require 'timecop'
+require 'webmock/rspec'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/dummy/app/logux/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.include RSpec::LiveControllers::Matchers
   config.include Logux::Test::Helpers
   config.example_status_persistence_file_path = '.rspec_status'
 
@@ -41,4 +44,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     FactoryBot.find_definitions
   end
+
+  include Rack::Test::Methods
 end

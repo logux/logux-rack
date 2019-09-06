@@ -1,29 +1,17 @@
 # frozen_string_literal: true
 
 module Logux
-  class Actions < ::ActionController::Parameters
-    def action_name
-      type&.split('/')&.dig(0)
+  class Actions < Action
+    class << self
+      extend Gem::Deprecate
+
+      deprecate :new, 'Logux::Action.new', 2020, 9
+
+      def warn(message)
+        Logux.logger.warn(message)
+      end
     end
 
-    def action_type
-      type&.split('/')&.last
-    end
-
-    def channel_name
-      channel&.split('/')&.dig(0)
-    end
-
-    def channel_id
-      channel&.split('/')&.last
-    end
-
-    def type
-      require(:type)
-    end
-
-    def channel
-      require(:channel)
-    end
+    private_class_method :warn
   end
 end

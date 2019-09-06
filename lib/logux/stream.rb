@@ -2,9 +2,11 @@
 
 module Logux
   class Stream
+    extend Forwardable
+
     attr_reader :stream
 
-    delegate :close, to: :stream
+    def_delegators :stream, :close
 
     def initialize(stream)
       @stream = stream
@@ -13,7 +15,7 @@ module Logux
     def write(payload)
       processed_payload = process(payload)
       Logux.logger.debug("Write to Logux response: #{processed_payload}")
-      stream.write(processed_payload)
+      stream << processed_payload
     end
 
     private

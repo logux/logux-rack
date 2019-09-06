@@ -2,9 +2,11 @@
 
 module Logux
   class ActionCaller
+    extend Forwardable
+
     attr_reader :action, :meta
 
-    delegate :logger, to: :Logux
+    def_delegator :Logux, :logger
 
     def initialize(action:, meta:)
       @action = action
@@ -12,12 +14,10 @@ module Logux
     end
 
     def call!
-      Logux::Model::UpdatesDeprecator.watch(level: :error) do
-        logger.debug(
-          "Searching action for Logux action: #{action}, meta: #{meta}"
-        )
-        format(action_controller.public_send(action.action_type))
-      end
+      logger.debug(
+        "Searching action for Logux action: #{action}, meta: #{meta}"
+      )
+      format(action_controller.public_send(action.action_type))
     rescue Logux::UnknownActionError, Logux::UnknownChannelError => e
       logger.warn(e)
       format(nil)

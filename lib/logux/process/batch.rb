@@ -44,13 +44,13 @@ module Logux
 
       def preprocess_action(chunk)
         { type: :action,
-          action: Logux::Actions.new(chunk[1]),
+          action: Logux::Action.new(chunk[1]),
           meta: Logux::Meta.new(chunk[2]) }
       end
 
       def preprocess_auth(chunk)
         { type: :auth,
-          auth: Logux::Auth.new(node_id: chunk[1],
+          auth: Logux::Auth.new(user_id: chunk[1],
                                 credentials: chunk[2],
                                 auth_id: chunk[3]) }
       end

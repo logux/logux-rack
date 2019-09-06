@@ -105,5 +105,24 @@ describe Logux, timecop: true do
         expect { request }.to send_to_logux(logux_commands)
       end
     end
+
+    describe 'logging' do
+      before do
+        fake_logger = double
+        allow(fake_logger).to receive(:warn)
+        Logux.configuration.logger = fake_logger
+      end
+
+      it 'warn if password is empty' do
+        described_class.verify_request_meta_data(password: nil)
+        expect(Logux.configuration.logger).to have_received(:warn)
+      end
+    end
+  end
+
+  describe '.application' do
+    it 'has Railsy shortcut for a Rack application' do
+      expect(Logux.application).to respond_to(:call)
+    end
   end
 end

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :logux_actions, class: Logux::Actions do
-    factory :logux_actions_subscribe do
+  factory :logux_action, class: Logux::Action do
+    factory :logux_action_subscribe do
       skip_create
       initialize_with do
         new({ type: 'logux/subscribe', channel: 'user/1' }.merge(attributes))
       end
     end
 
-    factory :logux_actions_subscribe_since do
+    factory :logux_action_subscribe_since do
       skip_create
       initialize_with do
         new({
@@ -20,28 +20,28 @@ FactoryBot.define do
       end
     end
 
-    factory :logux_actions_add do
+    factory :logux_action_add do
       skip_create
       initialize_with do
         new({ type: 'user/add', key: 'name', value: 'test' }.merge(attributes))
       end
     end
 
-    factory :logux_actions_update do
+    factory :logux_action_update do
       skip_create
       initialize_with do
         new({ type: 'user/add', key: 'name', value: 'test' }.merge(attributes))
       end
     end
 
-    factory :logux_actions_unknown do
+    factory :logux_action_unknown do
       skip_create
       initialize_with do
         new({ type: 'unknown/action' }.merge(attributes))
       end
     end
 
-    factory :logux_actions_unknown_subscribe do
+    factory :logux_action_unknown_subscribe do
       skip_create
       initialize_with do
         new(
@@ -51,7 +51,7 @@ FactoryBot.define do
       end
     end
 
-    factory :logux_actions_post do
+    factory :logux_action_post do
       skip_create
       initialize_with do
         new(

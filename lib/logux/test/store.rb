@@ -3,7 +3,7 @@
 module Logux
   module Test
     class Store
-      include Singleton
+      include ::Singleton
 
       def add(params)
         data << params

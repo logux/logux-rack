@@ -3,10 +3,8 @@
 module Logux
   module Test
     module Helpers
-      extend ActiveSupport::Concern
-
-      included do
-        before do
+      def self.included(base)
+        base.before do
           Logux::Test::Store.instance.reset!
         end
       end

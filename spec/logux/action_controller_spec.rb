@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Logux::ActionController do
   let(:action_controller) { described_class.new(action: action, meta: meta) }
-  let(:action) { create(:logux_actions_subscribe) }
+  let(:action) { create(:logux_action_subscribe) }
   let(:user) { User.find_or_create_by(id: 1, name: 'test') }
   let(:meta) { Logux::Meta.new }
 

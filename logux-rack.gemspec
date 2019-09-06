@@ -5,39 +5,62 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'logux/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'logux_rails'
+  spec.name          = 'logux-rack'
   spec.version       = Logux::VERSION
   spec.authors       = ['WildDima']
   spec.email         = ['dtopornin@gmail.com']
+  spec.summary       = 'Rack application backend for Logux proxy server'
 
-  spec.summary       = 'Logux client for rails'
-  spec.description   = 'Logux client for rails'
+  spec.description   = %(
+    This gem provides building blocks to integrate Logux server
+    interaction features into a Rack-based web applications.
+  ).strip.gsub(/\s+/, ' ')
+
   spec.homepage      = 'https://github.com/logux'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+  spec.metadata['source_code_uri'] = 'https://github.com/logux/logux-rack'
+  spec.metadata['changelog_uri'] = 'https://github.com/logux/logux-rack/CHANGELOG.md'
+
+  EXCLUDE_PATHS = %w[
+    spec
+  ].freeze
+
+  EXCLUDE_FILES = %w[
+    .gitignore
+    .pryrc
+    .rspec
+    .rubocop.yml
+    .travis.yml
+    Appraisals
+  ].freeze
+
+  EXCLUDE_PATTERN = %r{^(#{EXCLUDE_PATHS.join("|")}/)}.freeze
+
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    `git ls-files -z`
+      .split("\x0")
+      .reject { |f| f.match(EXCLUDE_PATTERN) } - EXCLUDE_FILES
   end
-  spec.bindir        = 'exe'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+
   spec.require_paths = ['lib']
 
   spec.add_dependency 'colorize'
   spec.add_dependency 'configurations'
   spec.add_dependency 'nanoid'
-  spec.add_dependency 'rails', '>= 5.0'
+  spec.add_dependency 'rack', '~> 2.0'
   spec.add_dependency 'rest-client'
-  spec.add_development_dependency 'appraisal', '~> 2.2'
+  spec.add_dependency 'sinatra', '>= 2.0', '< 3'
   spec.add_development_dependency 'bundler', '~> 1.16'
-  spec.add_development_dependency 'combustion', '~> 1.0.0'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'pry-byebug'
+  spec.add_development_dependency 'puma'
+  spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rspec-live_controllers'
-  spec.add_development_dependency 'rspec-rails'
+  spec.add_development_dependency 'rspec', '~> 3.8'
   spec.add_development_dependency 'rubocop', '~> 0.60.0'
   spec.add_development_dependency 'rubocop-rspec', '~> 1.27.0'
   spec.add_development_dependency 'simplecov'

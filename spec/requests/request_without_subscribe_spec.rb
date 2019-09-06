@@ -1,35 +1,25 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 
 describe 'Request logux server without subscribe' do
-  subject(:request_logux) do
-    post('/logux',
-         params: logux_params,
-         as: :json)
-  end
-
-  let(:password) { Logux.configuration.password }
+  include_context 'with request'
 
   let(:logux_params) do
-    { version: Logux::PROTOCOL_VERSION,
-      password: password,
-      commands: [
-        ['action',
-         { type: 'logux/subscribe', channel: channel },
-         { time: Time.now.to_i, id: '219_856_768 clientid 0', userId: 1 }]
-      ] }
+    build(:logux_subscribe_params, password: password, channel: channel)
   end
 
   context 'when verify_authorized=true' do
-    before { Logux.configuration.verify_authorized = true }
+    before do
+      Logux.configuration.verify_authorized = true
+      request_logux
+    end
 
     context 'when policy not exists' do
       let(:channel) { 'notexists/123' }
 
       it 'returns unknownChannel' do
-        request_logux
-        expect(response.stream).to have_chunk(
+        expect(JSON.parse(last_response.body)).to include(
           ['unknownChannel', '219_856_768 clientid 0']
         )
       end
@@ -39,8 +29,7 @@ describe 'Request logux server without subscribe' do
       let(:channel) { 'policy_without_channel/123' }
 
       it 'returns processed' do
-        request_logux
-        expect(response).to logux_processed('219_856_768 clientid 0')
+        expect(last_response).to logux_processed('219_856_768 clientid 0')
       end
     end
   end
@@ -48,11 +37,13 @@ describe 'Request logux server without subscribe' do
   context 'when verify_authorized=false' do
     let(:channel) { 'notexists/123' }
 
-    before { Logux.configuration.verify_authorized = false }
+    before do
+      Logux.configuration.verify_authorized = false
+      request_logux
+    end
 
     it 'returns processed' do
-      request_logux
-      expect(response).to logux_processed('219_856_768 clientid 0')
+      expect(last_response).to logux_processed('219_856_768 clientid 0')
     end
   end
 end

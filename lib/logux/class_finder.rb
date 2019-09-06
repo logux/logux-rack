@@ -4,6 +4,8 @@ module Logux
   class ClassFinder
     attr_reader :action, :meta
 
+    using Logux::Utils
+
     def initialize(action:, meta:)
       @action = action
       @meta = meta

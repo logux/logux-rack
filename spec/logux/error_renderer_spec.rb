@@ -51,7 +51,7 @@ describe Logux::ErrorRenderer do
         exception = StandardError.new
 
         expect(build_message(exception)).to eq(
-          ['error', 'Please look server logs for more information']
+          ['error', 'Please check server logs for more information']
         )
       end
     end

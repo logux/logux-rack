@@ -1,83 +1,40 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 
 describe 'Request logux server' do
-  subject(:request_logux) do
-    post('/logux',
-         params: logux_params,
-         as: :json)
-  end
+  include_context 'with request'
 
-  let(:password) { Logux.configuration.password }
-
-  let(:logux_params) do
-    { version: Logux::PROTOCOL_VERSION,
-      password: password,
-      commands: [
-        ['action',
-         { type: 'logux/subscribe', channel: 'post/123' },
-         { time: Time.now.to_i, id: '219_856_768 clientid 0', userId: 1 }],
-        ['action',
-         { type: 'comment/add', key: 'text', value: 'hi' },
-         { time: Time.now.to_i, id: '219_856_768 clientid 0', userId: 1 }]
-      ] }
-  end
-
-  context 'when authorized' do
+  context 'when authorization required' do
     before { request_logux }
 
-    it 'returns approved chunk' do
-      expect(response).to logux_approved('219_856_768 clientid 0')
+    context 'when authorized' do
+      let(:logux_params) { build(:logux_batch_params, password: password) }
+
+      it 'returns approved chunk' do
+        expect(last_response).to logux_approved('219_856_768 clientid 0')
+      end
     end
 
-    it 'returns processed chunk' do
-      expect(response).to logux_processed('219_856_768 clientid 0')
-    end
-  end
+    context 'when not authorized' do
+      let(:logux_params) { build(:logux_update_params) }
 
-  context 'when no authorized' do
-    before { request_logux }
-
-    let(:logux_params) do
-      { version: Logux::PROTOCOL_VERSION,
-        password: password,
-        commands: [
-          ['action',
-           { type: 'comment/update', key: 'text', value: 'hi' },
-           { time: Time.now.to_i, id: '219_856_768 clientid 0', userId: 1 }]
-        ] }
+      it 'returns correct body' do
+        expect(last_response).to logux_forbidden
+      end
     end
 
-    it 'returns correct body' do
-      expect(response).to logux_forbidden
-    end
-  end
+    context 'when password wrong' do
+      let(:logux_params) { build(:logux_batch_params, password: 'wrong') }
 
-  context 'when password wrong' do
-    before { request_logux }
-
-    let(:password) { '12345' }
-
-    it 'returns error' do
-      expect(response).to logux_unauthorized
+      it 'returns error' do
+        expect(last_response).to logux_unauthorized
+      end
     end
   end
 
   context 'with proxy' do
-    let(:logux_params) do
-      { version: Logux::PROTOCOL_VERSION,
-        password: password,
-        commands: [
-          ['action',
-           { type: 'logux/subscribe', channel: 'post/123' },
-           { time: Time.now.to_i, proxy: 'proxy_id',
-             id: '219_856_768 clientid 0', userId: 1 }],
-          ['action',
-           { type: 'comment/add', key: 'text', value: 'hi' },
-           { time: Time.now.to_i, id: '219_856_768 clientid 0', userId: 1 }]
-        ] }
-    end
+    let(:logux_params) { build(:logux_batch_params) }
 
     it 'returns correct chunk' do
       expect { request_logux }.to change { logux_store.size }.by(1)
