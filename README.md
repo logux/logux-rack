@@ -61,7 +61,7 @@ end
 
 After this, POST requests to `/logux` will be processed by `LoguxController`. You can redefine it or inherit from, if it necessary, for example, for implementing custom authorization flow.
 
-Here is another routing example for [Roda](https://github.com/jeremyevans/roda)application routing:
+Here is another routing example for [Roda](https://github.com/jeremyevans/roda) application routing:
 
 ```ruby
 class MyApp < Roda
