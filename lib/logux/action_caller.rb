@@ -14,7 +14,7 @@ module Logux
     end
 
     def call!
-      call_action
+      Logux.watch_action { call_action }
     rescue Logux::UnknownActionError, Logux::UnknownChannelError => e
       logger.warn(e)
       format(nil)

@@ -50,8 +50,11 @@ module Logux
   autoload :Test, 'logux/test'
   autoload :ErrorRenderer, 'logux/error_renderer'
   autoload :Utils, 'logux/utils'
+  autoload :ActionWatcher, 'logux/action_watcher'
 
   configurable %i[
+    action_watcher
+    action_watcher_options
     auth_rule
     logger
     logux_host
@@ -68,6 +71,8 @@ module Logux
     config.on_error = proc {}
     config.auth_rule = proc { false }
     config.render_backtrace_on_error = true
+    config.action_watcher = Logux::ActionWatcher
+    config.action_watcher_options = {}
   end
 
   module Rack
@@ -111,6 +116,14 @@ module Logux
 
     def logger
       configuration.logger
+    end
+
+    def action_watcher
+      configuration.action_watcher.new(configuration.action_watcher_options)
+    end
+
+    def watch_action
+      action_watcher.call { yield }
     end
 
     def application

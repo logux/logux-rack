@@ -41,7 +41,7 @@ module Logux
       end
 
       def handle_processing_errors(logux_stream, exception)
-        Logux.configuration.on_error.call(exception)
+        Logux.configuration.on_error&.call(exception)
         Logux.logger.error("#{exception}\n#{exception.backtrace.join("\n")}")
       ensure
         logux_stream.write(Logux::ErrorRenderer.new(exception).message)
