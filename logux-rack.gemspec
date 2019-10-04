@@ -2,11 +2,11 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'logux/version'
+require 'logux/rack/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'logux-rack'
-  spec.version       = Logux::VERSION
+  spec.version       = Logux::Rack::VERSION
   spec.authors       = ['WildDima']
   spec.email         = ['dtopornin@gmail.com']
   spec.summary       = 'Rack application backend for Logux proxy server'
