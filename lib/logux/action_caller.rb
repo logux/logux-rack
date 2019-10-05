@@ -14,13 +14,17 @@ module Logux
     end
 
     def call!
-      logger.debug(
-        "Searching action for Logux action: #{action}, meta: #{meta}"
-      )
-      format(action_controller.public_send(action.action_type))
+      Logux.watch_action { call_action }
     rescue Logux::UnknownActionError, Logux::UnknownChannelError => e
       logger.warn(e)
       format(nil)
+    end
+
+    protected
+
+    def call_action
+      logger.debug("Searching Logux action: #{action}, meta: #{meta}")
+      format(action_controller.public_send(action.action_type))
     end
 
     private
