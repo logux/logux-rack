@@ -93,7 +93,6 @@ describe Logux::Meta do
         {
           'users' => %w[user],
           'nodes' => %w[node],
-          'reasons' => %w[reason],
           'channels' => %w[channel]
         }
       end
