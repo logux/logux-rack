@@ -7,7 +7,6 @@ services:
 before_script:
   - unset BUNDLE_GEMFILE
   - docker-compose run app bundle install
-  - docker-compose run app bundle exec appraisal install
 
 script:
   - docker-compose run app bundle exec rspec
