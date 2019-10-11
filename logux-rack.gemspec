@@ -51,7 +51,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rack', '~> 2.0'
   spec.add_dependency 'rest-client', '>= 1.7.3', '< 3'
   spec.add_dependency 'sinatra', '>= 2.0', '< 3'
-  spec.add_development_dependency 'bundler', '~> 1.16'
+  spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'pry'
