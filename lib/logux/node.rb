@@ -20,8 +20,10 @@ module Logux
       end
     end
 
+    NODE_ID_SIZE = 8
+
     def node_id
-      @node_id ||= "server:#{Nanoid.generate(size: 8)}"
+      @node_id ||= "server:#{Nanoid.generate(size: NODE_ID_SIZE)}"
     end
 
     private
