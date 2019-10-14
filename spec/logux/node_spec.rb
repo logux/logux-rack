@@ -22,7 +22,6 @@ describe Logux::Node do
       end
 
       it('returns 1 in sequence') do
-        puts id_pattern(sequence: 1)
         expect(action_id).to match(id_pattern(sequence: 1))
       end
     end
