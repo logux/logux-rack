@@ -88,10 +88,9 @@ module Logux
       Logux::Add.new.call(commands)
     end
 
-    def undo(meta, reason: nil, data: {}, action: nil)
+    def undo(meta, reason: nil, data: {})
       undo_action = data.merge(type: 'logux/undo', id: meta.id)
       undo_action[:reason] = reason if reason
-      undo_action[:action] = action if action
       add(undo_action, meta.undo_meta)
     end
 
