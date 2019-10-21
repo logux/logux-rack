@@ -89,10 +89,9 @@ module Logux
     end
 
     def undo(meta, reason: nil, data: {})
-      add(
-        data.merge(type: 'logux/undo', id: meta.id, reason: reason),
-        Logux::Meta.new(clients: [meta.client_id])
-      )
+      undo_action = data.merge(type: 'logux/undo', id: meta.id)
+      undo_action[:reason] = reason if reason
+      add(undo_action, meta.undo_meta)
     end
 
     def verify_request_meta_data(meta_params)

@@ -84,4 +84,37 @@ describe Logux::Meta do
       end
     end
   end
+
+  describe '#undo_meta' do
+    subject(:undo_meta) { meta.undo_meta }
+
+    context 'with resend keys' do
+      let(:attributes) do
+        {
+          'users' => %w[user],
+          'nodes' => %w[node],
+          'channels' => %w[channel]
+        }
+      end
+
+      it 'copies re-send keys' do
+        expect(undo_meta).to include(attributes)
+      end
+    end
+
+    context 'with clients list' do
+      let(:clients_list) { %w[client] }
+      let(:attributes) { { 'clients' => clients_list } }
+
+      it 'appends client ids' do
+        expect(undo_meta['clients']).to eq([meta.client_id] + clients_list)
+      end
+    end
+
+    context 'without clients list' do
+      it 'contains client id' do
+        expect(undo_meta['clients']).to eq([meta.client_id])
+      end
+    end
+  end
 end

@@ -1,10 +1,13 @@
+language: minimal
 sudo: require
+
 services:
   - docker
 
 before_script:
   - unset BUNDLE_GEMFILE
   - docker-compose run app bundle install
+
 script:
   - docker-compose run app bundle exec rspec
   - docker-compose run app bundle exec rubocop
