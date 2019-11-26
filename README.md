@@ -9,7 +9,7 @@
 
 Add WebSockets, live-updates and offline-first to any Rack-based application with [Logux](https://logux.io/). It adds [Logux Back-end Protocol](https://logux.io/protocols/backend/spec/) support to Ruby on Rails or any other Rack applications, so you can use Logux Server as a proxy between WebSocket and your web application.
 
-Read [Creating Logux Proxy](https://github.com/logux/logux/blob/master/2-starting/2-creating-proxy.md) guide.
+Read [Creating Logux Proxy](https://logux.io/guide/starting/proxy-server/) guide.
 
 ## Installation
 
