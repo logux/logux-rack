@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
     interaction features into a Rack-based web applications.
   ).strip.gsub(/\s+/, ' ')
 
-  spec.homepage      = 'https://github.com/logux'
+  spec.homepage      = 'https://logux.io/'
   spec.license       = 'MIT'
 
   spec.metadata['source_code_uri'] = 'https://github.com/logux/logux-rack'
