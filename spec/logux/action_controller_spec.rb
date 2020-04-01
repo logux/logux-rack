@@ -22,6 +22,18 @@ describe Logux::ActionController do
     end
   end
 
+  describe '#send_back' do
+    subject(:send_back) { action_controller.send_back(back_action) }
+
+    let(:back_action) { { 'type' => 'added' } }
+    let(:expected_meta) { meta.merge('clients' => [meta.client_id]) }
+    let(:expected_sent) { ['action', back_action, expected_meta] }
+
+    it 'makes request with correct clients' do
+      expect { send_back }.to send_to_logux(expected_sent)
+    end
+  end
+
   describe '.verify_authorized!' do
     subject(:verify_authorized!) { described_class.verify_authorized! }
 
