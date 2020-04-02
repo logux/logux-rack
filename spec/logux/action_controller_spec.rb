@@ -25,11 +25,16 @@ describe Logux::ActionController do
     subject(:send_back) { action_controller.send_back(back_action) }
 
     let(:back_action) { { 'type' => 'added' } }
-    let(:expected_meta) { meta.merge('clients' => [meta.client_id]) }
-    let(:expected_sent) { ['action', back_action, expected_meta] }
+    let(:expected_commands) do
+      [
+        'action',
+        back_action,
+        a_logux_meta_with(clients: [meta.client_id])
+      ]
+    end
 
     it 'makes request with correct clients' do
-      expect { send_back }.to send_to_logux(expected_sent)
+      expect { send_back }.to send_to_logux(expected_commands)
     end
   end
 
