@@ -22,14 +22,16 @@ describe Logux::ActionController do
   end
 
   describe '#send_back' do
-    subject(:send_back) { action_controller.send_back(back_action) }
+    subject(:send_back) { action_controller.send_back(back_action, back_meta) }
 
     let(:back_action) { { 'type' => 'added' } }
+    let(:back_meta) { { 'meta_key' => 'meta_value' } }
+
     let(:expected_commands) do
       [
         'action',
         back_action,
-        a_logux_meta_with(clients: [meta.client_id])
+        a_logux_meta_with({ clients: [meta.client_id] }.merge(back_meta))
       ]
     end
 
