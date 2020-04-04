@@ -5,7 +5,6 @@ require 'spec_helper'
 describe Logux::ActionController do
   let(:action_controller) { described_class.new(action: action, meta: meta) }
   let(:action) { create(:logux_action_subscribe) }
-  let(:user) { User.find_or_create_by(id: 1, name: 'test') }
   let(:meta) { Logux::Meta.new }
 
   describe '#respond' do
@@ -19,6 +18,25 @@ describe Logux::ActionController do
 
     it 'sets the meta with time' do
       expect(response.meta).to have_key('time')
+    end
+  end
+
+  describe '#send_back' do
+    subject(:send_back) { action_controller.send_back(back_action, back_meta) }
+
+    let(:back_action) { { 'type' => 'added' } }
+    let(:back_meta) { { 'meta_key' => 'meta_value' } }
+
+    let(:expected_commands) do
+      [
+        'action',
+        back_action,
+        a_logux_meta_with({ clients: [meta.client_id] }.merge(back_meta))
+      ]
+    end
+
+    it 'makes request with correct clients' do
+      expect { send_back }.to send_to_logux(expected_commands)
     end
   end
 

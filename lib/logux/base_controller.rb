@@ -19,6 +19,10 @@ module Logux
       @meta = meta
     end
 
+    def send_back(action, meta = {})
+      Logux.add(action, meta.merge(clients: [@meta.client_id]))
+    end
+
     def respond(status, action: @action, meta: @meta, custom_data: nil)
       Logux::Response.new(status,
                           action: action,
