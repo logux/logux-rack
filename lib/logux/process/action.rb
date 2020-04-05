@@ -39,7 +39,8 @@ module Logux
 
         action_caller = Logux::ActionCaller.new(
           action: action_from_chunk,
-          meta: meta_from_chunk
+          meta: meta_from_chunk,
+          resending: ->(targets) { process_resend!(targets) }
         )
 
         stream.write(action_caller.call!.format)
@@ -54,6 +55,11 @@ module Logux
         return stream.write(',') if policy_check
 
         stop_process!
+      end
+
+      def process_resend!(targets)
+        stream.write(['resend', meta_from_chunk['id'], targets])
+        stream.write(',')
       end
     end
   end

@@ -12,11 +12,12 @@ module Logux
       end
     end
 
-    attr_reader :action, :meta
+    attr_reader :action, :meta, :resending
 
-    def initialize(action:, meta: {})
+    def initialize(action:, meta: {}, resending: nil)
       @action = action
       @meta = meta
+      @resending = resending
     end
 
     def send_back(action, meta = {})

@@ -3,7 +3,17 @@
 require 'spec_helper'
 
 describe Logux::ActionController do
-  let(:action_controller) { described_class.new(action: action, meta: meta) }
+  let(:action_controller) do
+    described_class.new(action: action, meta: meta, resending: resending)
+  end
+  let(:resending) do
+    lambda do |targets|
+      stream.write(['resend', meta.id, targets])
+      stream.write(',')
+    end
+  end
+  let(:stream) { Logux::Stream.new([]) }
+
   let(:action) { create(:logux_action_subscribe) }
   let(:meta) { Logux::Meta.new }
 
@@ -37,6 +47,24 @@ describe Logux::ActionController do
 
     it 'makes request with correct clients' do
       expect { send_back }.to send_to_logux(expected_commands)
+    end
+  end
+
+  describe '#resend' do
+    subject(:resend) { action_controller.resend(targets) }
+
+    let(:targets) { { 'channel' => 'users' } }
+
+    before { resend }
+
+    it 'writes to the stream resending message' do
+      expect(
+        JSON.parse(stream.stream.first)
+      ).to eq(['resend', meta.id, targets])
+    end
+
+    it 'adds comma for further stream writing' do
+      expect(stream.stream.last).to eq(',')
     end
   end
 
