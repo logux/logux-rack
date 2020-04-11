@@ -4,13 +4,7 @@ require 'spec_helper'
 
 describe Logux::ActionController do
   let(:action_controller) do
-    described_class.new(action: action, meta: meta, resending: resending)
-  end
-  let(:resending) do
-    lambda do |targets|
-      stream.write(['resend', meta.id, targets])
-      stream.write(',')
-    end
+    described_class.new(action: action, meta: meta)
   end
   let(:stream) { Logux::Stream.new([]) }
 
@@ -50,21 +44,49 @@ describe Logux::ActionController do
     end
   end
 
-  describe '#resend' do
-    subject(:resend) { action_controller.resend(targets) }
-
-    let(:targets) { { 'channel' => 'users' } }
-
-    before { resend }
-
-    it 'writes to the stream resending message' do
-      expect(
-        JSON.parse(stream.stream.first)
-      ).to eq(['resend', meta.id, targets])
+  describe '.resend_receivers' do
+    subject(:resend_receivers) do
+      described_class.receivers_by_action(action.type, meta)
     end
 
-    it 'adds comma for further stream writing' do
-      expect(stream.stream.last).to eq(',')
+    let(:action_type) { action.type }
+    let(:receivers) { { 'channel' => 'users' } }
+
+    before do
+      local_action_type = action_type.split('/').last
+      local_receivers = receivers
+      described_class.class_eval do
+        resend_receivers local_action_type, local_receivers
+        resend_receivers 'not_existing_action', 'another' => 'receivers'
+      end
+    end
+
+    after do
+      described_class.class_eval do
+        @resend_targets = {}
+      end
+    end
+
+    context 'when receivers is a hash' do
+      it 'returns receivers as hash' do
+        expect(resend_receivers).to eq(receivers)
+      end
+    end
+
+    context 'when receivers is a lambda using meta' do
+      let(:receivers) { ->(meta) { { 'client_id' => meta.client_id } } }
+
+      it 'returns receivers as lambda result' do
+        expect(resend_receivers).to eq('client_id' => meta.client_id)
+      end
+    end
+
+    context 'when no receivers for such action are defined' do
+      let(:action_type) { 'not_existing_too' }
+
+      it 'returns nothing' do
+        expect(resend_receivers).to be_nil
+      end
     end
   end
 

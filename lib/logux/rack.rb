@@ -46,6 +46,7 @@ module Logux
   autoload :Response, 'logux/response'
   autoload :Stream, 'logux/stream'
   autoload :Process, 'logux/process'
+  autoload :Resender, 'logux/resender'
   autoload :Version, 'logux/version'
   autoload :Test, 'logux/test'
   autoload :ErrorRenderer, 'logux/error_renderer'

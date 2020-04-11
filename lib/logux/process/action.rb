@@ -12,6 +12,7 @@ module Logux
       end
 
       def call
+        process_resend!
         process_authorization!
         process_action!
       end
@@ -37,12 +38,8 @@ module Logux
       def process_action!
         return if stop_process?
 
-        action_caller = Logux::ActionCaller.new(
-          action: action_from_chunk,
-          meta: meta_from_chunk,
-          resending: ->(targets) { process_resend!(targets) }
-        )
-
+        action_caller = Logux::ActionCaller.new(action: action_from_chunk,
+                                                meta: meta_from_chunk)
         stream.write(action_caller.call!.format)
       end
 
@@ -57,8 +54,14 @@ module Logux
         stop_process!
       end
 
-      def process_resend!(targets)
-        stream.write(['resend', meta_from_chunk['id'], targets])
+      def process_resend!
+        resender = Logux::Resender.new(action: action_from_chunk,
+                                       meta: meta_from_chunk)
+
+        resend_data = resender.call!
+        return unless resend_data.present?
+
+        stream.write(resend_data)
         stream.write(',')
       end
     end

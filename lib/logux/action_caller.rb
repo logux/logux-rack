@@ -4,14 +4,13 @@ module Logux
   class ActionCaller
     extend Forwardable
 
-    attr_reader :action, :meta, :resending
+    attr_reader :action, :meta
 
     def_delegator :Logux, :logger
 
-    def initialize(action:, meta:, resending: nil)
+    def initialize(action:, meta:)
       @action = action
       @meta = meta
-      @resending = resending
     end
 
     def call!
@@ -41,11 +40,7 @@ module Logux
     end
 
     def action_controller
-      class_finder.find_action_class.new(
-        action: action,
-        meta: meta,
-        resending: resending
-      )
+      class_finder.find_action_class.new(action: action, meta: meta)
     end
   end
 end

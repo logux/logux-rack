@@ -33,6 +33,11 @@ module Logux
         )
       end
 
+      def logux_resent(meta = nil)
+        Logux::Test::Matchers::ResponseChunks.new(meta: meta,
+                                                  includes: ['resend'])
+      end
+
       def logux_processed(meta = nil)
         Logux::Test::Matchers::ResponseChunks.new(
           meta: meta, includes: ['processed'], excludes: %w[forbidden error]
