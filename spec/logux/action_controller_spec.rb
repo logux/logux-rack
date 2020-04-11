@@ -3,11 +3,7 @@
 require 'spec_helper'
 
 describe Logux::ActionController do
-  let(:action_controller) do
-    described_class.new(action: action, meta: meta)
-  end
-  let(:stream) { Logux::Stream.new([]) }
-
+  let(:action_controller) { described_class.new(action: action, meta: meta) }
   let(:action) { create(:logux_action_subscribe) }
   let(:meta) { Logux::Meta.new }
 
