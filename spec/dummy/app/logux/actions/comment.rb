@@ -2,7 +2,7 @@
 
 module Actions
   class Comment < Logux::ActionController
-    resend_receivers :add, channel: :users
+    resend :add, channel: :users
 
     def add
       respond :processed

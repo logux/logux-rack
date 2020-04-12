@@ -3,7 +3,7 @@
 module Logux
   class ActionController < Logux::BaseController
     class << self
-      def resend_receivers(action_type, receivers)
+      def resend(action_type, receivers)
         resend_targets[action_type.to_s] = receivers
       end
 

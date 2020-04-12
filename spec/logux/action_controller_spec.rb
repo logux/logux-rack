@@ -40,9 +40,9 @@ describe Logux::ActionController do
     end
   end
 
-  describe '.resend_receivers' do
-    subject(:resend_receivers) do
-      described_class.receivers_by_action(action.type, meta)
+  describe '.resend' do
+    subject(:resend) do
+      described_class.receivers_by_action(action.type, action)
     end
 
     let(:action_type) { action.type }
@@ -52,8 +52,8 @@ describe Logux::ActionController do
       local_action_type = action_type.split('/').last
       local_receivers = receivers
       described_class.class_eval do
-        resend_receivers local_action_type, local_receivers
-        resend_receivers 'not_existing_action', 'another' => 'receivers'
+        resend local_action_type, local_receivers
+        resend 'not_existing_action', 'another' => 'receivers'
       end
     end
 
@@ -65,7 +65,7 @@ describe Logux::ActionController do
 
     context 'when receivers is a hash' do
       it 'returns receivers as hash' do
-        expect(resend_receivers).to eq(receivers)
+        expect(resend).to eq(receivers)
       end
     end
 
@@ -77,7 +77,7 @@ describe Logux::ActionController do
       end
 
       it 'returns receivers as lambda result' do
-        expect(resend_receivers).to eq('channel' => "post/#{action.channel_id}")
+        expect(resend).to eq('channel' => "post/#{action.channel_id}")
       end
     end
 
@@ -85,7 +85,7 @@ describe Logux::ActionController do
       let(:action_type) { 'not_existing_too' }
 
       it 'returns nothing' do
-        expect(resend_receivers).to be_nil
+        expect(resend).to be_nil
       end
     end
   end

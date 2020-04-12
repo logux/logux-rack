@@ -37,7 +37,7 @@ describe Logux::Resender do
       before do
         module Actions
           class User < Logux::ActionController
-            resend_receivers :remove, channel: 'users'
+            resend :remove, channel: 'users'
 
             def add
               respond(:ok)
@@ -64,7 +64,7 @@ describe Logux::Resender do
       before do
         module Actions
           class User < Logux::ActionController
-            resend_receivers :add, channel: 'users'
+            resend :add, channel: 'users'
 
             def add
               respond(:ok)
