@@ -17,7 +17,11 @@ describe Logux::Resender do
     context 'when no receivers are defined' do
       before do
         module Actions
-          class User < Logux::ChannelController
+          class User < Logux::ActionController
+            class << self
+              undef_method :receivers_by_action
+            end
+
             def add
               respond(:ok)
             end
