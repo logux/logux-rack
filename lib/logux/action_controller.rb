@@ -7,11 +7,11 @@ module Logux
         resend_targets[action_type.to_s] = receivers
       end
 
-      def receivers_by_action(action_type, meta)
+      def receivers_by_action(action_type, action)
         receivers = resend_targets[action_type.split('/').last.to_s]
         return receivers unless receivers.respond_to?(:call)
 
-        receivers.call(meta)
+        receivers.call(action)
       end
 
       def resend_targets

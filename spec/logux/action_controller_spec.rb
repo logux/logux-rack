@@ -69,11 +69,15 @@ describe Logux::ActionController do
       end
     end
 
-    context 'when receivers is a lambda using meta' do
-      let(:receivers) { ->(meta) { { 'client_id' => meta.client_id } } }
+    context 'when receivers is a lambda using action' do
+      let(:receivers) do
+        lambda { |action|
+          { 'channel' => "post/#{action.channel_id}" }
+        }
+      end
 
       it 'returns receivers as lambda result' do
-        expect(resend_receivers).to eq('client_id' => meta.client_id)
+        expect(resend_receivers).to eq('channel' => "post/#{action.channel_id}")
       end
     end
 

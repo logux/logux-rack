@@ -41,7 +41,7 @@ module Logux
 
     def receivers_for_action
       @receivers_for_action ||= action_class.receivers_by_action(action.type,
-                                                                 meta)
+                                                                 action)
     end
 
     def class_finder
