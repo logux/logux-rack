@@ -13,7 +13,7 @@ require 'singleton'
 module Logux
   include Configurations
 
-  PROTOCOL_VERSION = 1
+  PROTOCOL_VERSION = 3
 
   class WithMetaError < StandardError
     attr_reader :meta
