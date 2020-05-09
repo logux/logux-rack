@@ -11,29 +11,29 @@ module Logux
     def message
       case exception
       when Logux::WithMetaError
-        build_message(exception, exception.meta.id)
+        build_message(exception, [exception.meta.id, backtrace(exception)])
       when Logux::UnauthorizedError
-        build_message(exception, exception.message)
+        build_message(exception, [exception.message])
       when StandardError
         # some runtime error that should be fixed
-        render_stardard_error(exception)
+        ['error', backtrace(exception)]
       end
     end
 
     private
 
-    def render_stardard_error(exception)
-      if Logux.configuration.render_backtrace_on_error
-        ['error', exception.message + "\n" + exception.backtrace.join("\n")]
-      else
-        ['error', 'Please check server logs for more information']
+    def backtrace(exception)
+      unless Logux.configuration.render_backtrace_on_error
+        return 'Please check server logs for more information'
       end
+
+      [exception.message, exception.backtrace].flatten.compact.join("\n")
     end
 
     def build_message(exception, additional_info)
       [
         exception.class.name.demodulize.camelize(:lower).gsub(/Error/, ''),
-        additional_info
+        *additional_info
       ]
     end
   end

@@ -17,7 +17,7 @@ describe 'Request logux server without action' do
 
       it 'returns unknownAction' do
         expect(JSON.parse(last_response.body)).to include(
-          ['unknownAction', '219_856_768 clientid 0']
+          ['unknownAction', '219_856_768 clientid 0', /Unable to find/]
         )
       end
     end

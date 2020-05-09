@@ -20,7 +20,7 @@ describe 'Request logux server without subscribe' do
 
       it 'returns unknownChannel' do
         expect(JSON.parse(last_response.body)).to include(
-          ['unknownChannel', '219_856_768 clientid 0']
+          ['unknownChannel', '219_856_768 clientid 0', /Unable to find/]
         )
       end
     end

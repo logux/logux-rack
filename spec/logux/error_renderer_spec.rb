@@ -5,55 +5,52 @@ require 'spec_helper'
 describe Logux::ErrorRenderer do
   let(:action_id) { '123 10:uuid 0' }
   let(:meta) { create(:logux_meta, id: action_id) }
+  let(:message) { 'test' }
 
   describe '#message' do
-    def build_message(exception)
-      described_class.new(exception).message
+    subject(:built_message) { described_class.new(exception).message }
+
+    context 'with UnknownActionError' do
+      let(:exception) { Logux::UnknownActionError.new(message, meta: meta) }
+
+      it { is_expected.to eq(['unknownAction', action_id, message]) }
     end
 
-    it 'returns correct error message for UnknownActionError' do
-      exception = Logux::UnknownActionError.new('test', meta: meta)
+    context 'with UnknownChannelError' do
+      let(:exception) { Logux::UnknownChannelError.new(message, meta: meta) }
 
-      expect(build_message(exception)).to eq(['unknownAction', action_id])
+      it { is_expected.to eq(['unknownChannel', action_id, message]) }
     end
 
-    it 'returns correct error message for UnknownChannelError' do
-      exception = Logux::UnknownChannelError.new('test', meta: meta)
+    context 'with UnauthorizedError' do
+      let(:exception) { Logux::UnauthorizedError.new(message) }
 
-      expect(build_message(exception)).to eq(['unknownChannel', action_id])
-    end
-
-    it 'returns correct error message for UnauthorizedError' do
-      exception = Logux::UnauthorizedError.new('test')
-
-      expect(build_message(exception)).to eq(%w[unauthorized test])
+      it { is_expected.to eq(['unauthorized', message]) }
     end
 
     context 'when Logux.configuration.render_backtrace_on_error is true' do
       around do |example|
         Logux.configuration.render_backtrace_on_error = true
+        exception.set_backtrace(caller)
         example.run
         Logux.configuration.render_backtrace_on_error = false
       end
 
-      it 'returns correct error with backtrace for some unknown error' do
-        exception = StandardError.new('Test')
-        exception.set_backtrace(caller)
-
-        expect(build_message(exception)).to eq(
-          ['error', "Test\n" + exception.backtrace.join("\n")]
-        )
+      let(:exception) { StandardError.new(message) }
+      let(:expected_message) do
+        ['error', "#{message}\n" + exception.backtrace.join("\n")]
       end
+
+      it { is_expected.to eq(expected_message) }
     end
 
     context 'when Logux.configuration.render_backtrace_on_error is false' do
-      it 'returns correct error message for some unknown error' do
-        exception = StandardError.new
-
-        expect(build_message(exception)).to eq(
-          ['error', 'Please check server logs for more information']
-        )
+      let(:exception) { StandardError.new(message) }
+      let(:expected_message) do
+        ['error', 'Please check server logs for more information']
       end
+
+      it { is_expected.to eq(expected_message) }
     end
   end
 end

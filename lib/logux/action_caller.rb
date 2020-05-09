@@ -18,6 +18,8 @@ module Logux
     rescue Logux::UnknownActionError, Logux::UnknownChannelError => e
       logger.warn(e)
       format(nil)
+    rescue => e
+      raise Logux::WithMetaError(e.message, meta: meta)
     end
 
     protected
