@@ -37,7 +37,7 @@ module Logux
       end
 
       def meta_params
-        logux_params&.slice('version', 'password')
+        logux_params&.slice('version', 'secret')
       end
 
       def handle_processing_errors(logux_stream, exception)

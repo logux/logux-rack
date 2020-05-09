@@ -113,8 +113,8 @@ describe Logux, timecop: true do
         Logux.configuration.logger = fake_logger
       end
 
-      it 'warn if password is empty' do
-        described_class.verify_request_meta_data(password: nil)
+      it 'warn if secret is empty' do
+        described_class.verify_request_meta_data(secret: nil)
         expect(Logux.configuration.logger).to have_received(:warn)
       end
     end

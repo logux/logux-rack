@@ -7,7 +7,7 @@ FactoryBot.define do
     initialize_with do
       {
         version: attributes[:protocol_version] || Logux::PROTOCOL_VERSION,
-        password: attributes[:password] || 'secret',
+        secret: attributes[:secret] || 'secret',
         commands: attributes[:commands]
       }
     end
@@ -49,7 +49,7 @@ FactoryBot.define do
       initialize_with do
         build(
           :logux_params,
-          password: attributes[:password],
+          secret: attributes[:secret],
           commands: [
             build(:subscribe_command, channel: 'post/123'),
             build(:add_command)
