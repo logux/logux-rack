@@ -14,6 +14,10 @@ describe 'Request logux server' do
       it 'returns approved chunk' do
         expect(last_response).to logux_approved('219_856_768 clientid 0')
       end
+
+      it 'returns resend' do
+        expect(last_response).to logux_resent('219_856_768 clientid 0')
+      end
     end
 
     context 'when not authorized' do

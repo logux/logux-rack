@@ -40,6 +40,56 @@ describe Logux::ActionController do
     end
   end
 
+  describe '.resend' do
+    subject(:resend) do
+      described_class.receivers_by_action(action.type, action)
+    end
+
+    let(:action_type) { action.type }
+    let(:receivers) { { 'channel' => 'users' } }
+
+    before do
+      local_action_type = action_type.split('/').last
+      local_receivers = receivers
+      described_class.class_eval do
+        resend local_action_type, local_receivers
+        resend 'not_existing_action', 'another' => 'receivers'
+      end
+    end
+
+    after do
+      described_class.class_eval do
+        @resend_targets = {}
+      end
+    end
+
+    context 'when receivers is a hash' do
+      it 'returns receivers as hash' do
+        expect(resend).to eq(receivers)
+      end
+    end
+
+    context 'when receivers is a lambda using action' do
+      let(:receivers) do
+        lambda { |action|
+          { 'channel' => "post/#{action.channel_id}" }
+        }
+      end
+
+      it 'returns receivers as lambda result' do
+        expect(resend).to eq('channel' => "post/#{action.channel_id}")
+      end
+    end
+
+    context 'when no receivers for such action are defined' do
+      let(:action_type) { 'not_existing_too' }
+
+      it 'returns nothing' do
+        expect(resend).to be_nil
+      end
+    end
+  end
+
   describe '.verify_authorized!' do
     subject(:verify_authorized!) { described_class.verify_authorized! }
 
