@@ -60,7 +60,7 @@ module Logux
     logger
     logux_host
     on_error
-    password
+    secret
     render_backtrace_on_error
     verify_authorized
   ]
@@ -96,14 +96,14 @@ module Logux
     end
 
     def verify_request_meta_data(meta_params)
-      if configuration.password.nil?
-        logger.warn(%(Please, add password for logux server:
+      if configuration.secret.nil?
+        logger.warn(%(Please, add secret for logux server:
                             Logux.configure do |c|
-                              c.password = 'your-password'
+                              c.secret = 'your-secret'
                             end))
       end
-      auth = configuration.password == meta_params&.dig('password')
-      raise UnauthorizedError, 'Incorrect password' unless auth
+      auth = configuration.secret == meta_params&.dig('secret')
+      raise UnauthorizedError, 'Incorrect secret' unless auth
     end
 
     def process_batch(stream:, batch:)

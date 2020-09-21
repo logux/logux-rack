@@ -9,7 +9,7 @@ describe 'Request logux server' do
     before { request_logux }
 
     context 'when authorized' do
-      let(:logux_params) { build(:logux_batch_params, password: password) }
+      let(:logux_params) { build(:logux_batch_params, secret: secret) }
 
       it 'returns approved chunk' do
         expect(last_response).to logux_approved('219_856_768 clientid 0')
@@ -28,8 +28,8 @@ describe 'Request logux server' do
       end
     end
 
-    context 'when password wrong' do
-      let(:logux_params) { build(:logux_batch_params, password: 'wrong') }
+    context 'when secret wrong' do
+      let(:logux_params) { build(:logux_batch_params, secret: 'wrong') }
 
       it 'returns error' do
         expect(last_response).to logux_unauthorized
