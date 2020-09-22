@@ -11,19 +11,22 @@ module Logux
       end
 
       post LOGUX_ROOT_PATH do
-        stream do |out|
+        begin
+          out = []
+          logux_stream = Logux::Stream.new(out)
+          logux_stream.write('[')
+          Logux.verify_request_meta_data(meta_params)
           begin
-            logux_stream = Logux::Stream.new(out)
-            logux_stream.write('[')
-            Logux.verify_request_meta_data(meta_params)
             Logux.process_batch(stream: logux_stream, batch: command_params)
           rescue => e
-            handle_processing_errors(logux_stream, e)
+            handle_action_processing_errors(logux_stream, e)
           ensure
             logux_stream.write(']')
-            logux_stream.close
           end
+        rescue StandardError => e
+          halt 500, [e.message, e.backtrace].flatten.compact.join("\n")
         end
+        out
       end
 
       private
@@ -40,7 +43,7 @@ module Logux
         logux_params&.slice('version', 'secret')
       end
 
-      def handle_processing_errors(logux_stream, exception)
+      def handle_action_processing_errors(logux_stream, exception)
         Logux.configuration.on_error&.call(exception)
         Logux.logger.error("#{exception}\n#{exception.backtrace.join("\n")}")
       ensure

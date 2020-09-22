@@ -31,8 +31,12 @@ describe 'Request logux server' do
     context 'when secret wrong' do
       let(:logux_params) { build(:logux_batch_params, secret: 'wrong') }
 
-      it 'returns error' do
-        expect(last_response).to logux_unauthorized
+      it 'returns 500' do
+        expect(last_response).to be_server_error
+      end
+
+      it 'returns message and backtrace' do
+        expect(last_response.body).to include('Incorrect secret')
       end
     end
   end

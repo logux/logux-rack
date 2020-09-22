@@ -10,31 +10,32 @@ module Logux
 
     def message
       case exception
+      when UnknownActionError, UnknownChannelError
+        [
+          exception.class.name.demodulize.camelize(:lower).gsub(/Error/, ''),
+          exception.meta.id
+        ]
+      when UnauthorizedError
+        [exception.class.name.demodulize.camelize(:lower).gsub(/Error/, '')]
       when Logux::WithMetaError
-        build_message(exception, exception.meta.id)
-      when Logux::UnauthorizedError
-        build_message(exception, exception.message)
+        [
+          'error',
+          exception.meta.id,
+          stacktrace(exception)
+        ]
       when StandardError
-        # some runtime error that should be fixed
-        render_stardard_error(exception)
+        ['error', stacktrace(exception)]
       end
     end
 
     private
 
-    def render_stardard_error(exception)
+    def stacktrace(exception)
       if Logux.configuration.render_backtrace_on_error
-        ['error', exception.message + "\n" + exception.backtrace.join("\n")]
+        [exception.message, exception.backtrace&.join("\n")].compact.join("\n")
       else
-        ['error', 'Please check server logs for more information']
+        'Please check server logs for more information'
       end
-    end
-
-    def build_message(exception, additional_info)
-      [
-        exception.class.name.demodulize.camelize(:lower).gsub(/Error/, ''),
-        additional_info
-      ]
     end
   end
 end

@@ -62,12 +62,6 @@ module Logux
         )
       end
 
-      def logux_unauthorized(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['unauthorized']
-        )
-      end
-
       def logux_denied(meta = nil)
         Logux::Test::Matchers::ResponseChunks.new(
           meta: meta, includes: ['denied']
