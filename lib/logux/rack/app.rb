@@ -11,22 +11,20 @@ module Logux
       end
 
       post LOGUX_ROOT_PATH do
-        begin
-          out = []
-          logux_stream = Logux::Stream.new(out)
-          logux_stream.write('[')
-          Logux.verify_request_meta_data(meta_params)
+        halt(403, 'Wrong secret') unless Logux.verify_request_meta_data(meta_params)
+        halt(400, 'Back-end protocol version is not supported') unless Logux.verify_protocol(meta_params)
+
+        stream do |out|
           begin
-            Logux.process_batch(stream: logux_stream, batch: command_params)
+            logux_stream = Logux::Stream.new(out)
+            logux_stream.write('[')
+              Logux.process_batch(stream: logux_stream, batch: command_params)
           rescue => e
             handle_action_processing_errors(logux_stream, e)
           ensure
             logux_stream.write(']')
           end
-        rescue StandardError => e
-          halt 500, [e.message, e.backtrace].flatten.compact.join("\n")
         end
-        out
       end
 
       private

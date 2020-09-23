@@ -15,8 +15,6 @@ module Logux
           exception.class.name.demodulize.camelize(:lower).gsub(/Error/, ''),
           exception.meta.id
         ]
-      when UnauthorizedError
-        [exception.class.name.demodulize.camelize(:lower).gsub(/Error/, '')]
       when Logux::WithMetaError
         [
           'error',

@@ -26,7 +26,6 @@ module Logux
 
   UnknownActionError = Class.new(WithMetaError)
   UnknownChannelError = Class.new(WithMetaError)
-  UnauthorizedError = Class.new(StandardError)
   ParameterMissingError = Class.new(StandardError)
 
   autoload :Client, 'logux/client'
@@ -102,8 +101,12 @@ module Logux
                               c.secret = 'your-secret'
                             end))
       end
-      auth = configuration.secret == meta_params&.dig('secret')
-      raise UnauthorizedError, 'Incorrect secret' unless auth
+
+      configuration.secret == meta_params&.dig('secret')
+    end
+
+    def verify_protocol(meta_params)
+      Logux::PROTOCOL_VERSION == meta_params&.dig('version')
     end
 
     def process_batch(stream:, batch:)

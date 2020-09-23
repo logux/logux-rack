@@ -23,13 +23,6 @@ describe Logux::ErrorRenderer do
       it { is_expected.to eq(['unknownChannel', action_id]) }
     end
 
-    context 'when UnauthorizedError' do
-      let(:exception) { Logux::UnauthorizedError.new(message) }
-      let(:message) { 'test' }
-
-      it { is_expected.to eq(['unauthorized']) }
-    end
-
     context 'when StandardError' do
       let(:exception) { StandardError.new(message) }
       let(:error_message) { "#{message}\n#{exception.backtrace.join("\n")}" }
