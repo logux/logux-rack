@@ -11,23 +11,28 @@ module Logux
       end
 
       post LOGUX_ROOT_PATH do
-        halt(403, 'Wrong secret') unless Logux.verify_request_meta_data(meta_params)
-        halt(400, 'Back-end protocol version is not supported') unless Logux.verify_protocol(meta_params)
-
-        stream do |out|
-          begin
-            logux_stream = Logux::Stream.new(out)
-            logux_stream.write('[')
-              Logux.process_batch(stream: logux_stream, batch: command_params)
-          rescue => e
-            handle_action_processing_errors(logux_stream, e)
-          ensure
-            logux_stream.write(']')
+        begin
+          halt(403, 'Wrong secret') unless Logux.secret_is_valid?(meta_params)
+          unless Logux.protocol_is_valid?(meta_params)
+            halt(400, 'Back-end protocol version is not supported')
           end
+          stream { |out| build_response(out) }
+        rescue JSON::ParserError
+          halt(400, 'Wrong body')
         end
       end
 
       private
+
+      def build_response(out)
+        logux_stream = Logux::Stream.new(out)
+        logux_stream.write('[')
+        Logux.process_batch(stream: logux_stream, batch: command_params)
+      rescue => e
+        handle_action_processing_errors(logux_stream, e)
+      ensure
+        logux_stream.write(']')
+      end
 
       def logux_params
         @logux_params ||= JSON.parse(request.body.read)

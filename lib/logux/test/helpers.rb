@@ -9,6 +9,10 @@ module Logux
         end
       end
 
+      def eq_body(body)
+        Logux::Test::Matchers::ResponseBody.new(body)
+      end
+
       def logux_store
         Logux::Test::Store.instance.data
       end

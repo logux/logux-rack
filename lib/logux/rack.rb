@@ -27,6 +27,7 @@ module Logux
   UnknownActionError = Class.new(WithMetaError)
   UnknownChannelError = Class.new(WithMetaError)
   ParameterMissingError = Class.new(StandardError)
+  RequestError = Class.new(StandardError)
 
   autoload :Client, 'logux/client'
   autoload :Meta, 'logux/meta'
@@ -94,7 +95,7 @@ module Logux
       add(undo_action, meta.undo_meta)
     end
 
-    def verify_request_meta_data(meta_params)
+    def secret_is_valid?(meta_params)
       if configuration.secret.nil?
         logger.warn(%(Please, add secret for logux server:
                             Logux.configure do |c|
@@ -105,7 +106,7 @@ module Logux
       configuration.secret == meta_params&.dig('secret')
     end
 
-    def verify_protocol(meta_params)
+    def protocol_is_valid?(meta_params)
       Logux::PROTOCOL_VERSION == meta_params&.dig('version')
     end
 

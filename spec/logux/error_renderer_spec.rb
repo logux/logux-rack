@@ -33,13 +33,19 @@ describe Logux::ErrorRenderer do
       end
 
       it { is_expected.to eq(['error', error_message]) }
+    end
 
-      context 'when render_backtrace_on_error is false' do
-        before do
-          Logux.configuration.render_backtrace_on_error = false
-        end
+    context 'when render_backtrace_on_error is false' do
+      let(:exception) { StandardError.new }
 
-        it { is_expected.to eq(['error', 'Please check server logs for more information']) }
+      before do
+        Logux.configuration.render_backtrace_on_error = false
+      end
+
+      it do
+        is_expected.to eq(
+          ['error', 'Please check server logs for more information']
+        )
       end
     end
   end

@@ -11,29 +11,26 @@ module Logux
     def message
       case exception
       when UnknownActionError, UnknownChannelError
-        [
-          exception.class.name.demodulize.camelize(:lower).gsub(/Error/, ''),
-          exception.meta.id
-        ]
+        [action_response, exception.meta.id]
       when Logux::WithMetaError
-        [
-          'error',
-          exception.meta.id,
-          stacktrace(exception)
-        ]
+        ['error', exception.meta.id, stacktrace]
       when StandardError
-        ['error', stacktrace(exception)]
+        ['error', stacktrace]
       end
     end
 
     private
 
-    def stacktrace(exception)
+    def stacktrace
       if Logux.configuration.render_backtrace_on_error
         [exception.message, exception.backtrace&.join("\n")].compact.join("\n")
       else
         'Please check server logs for more information'
       end
+    end
+
+    def action_response
+      exception.class.name.demodulize.camelize(:lower).gsub(/Error/, '')
     end
   end
 end

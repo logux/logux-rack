@@ -4,61 +4,52 @@ require 'spec_helper'
 
 describe 'Request logux server' do
   include_context 'with request'
+  subject { request_logux }
 
   context 'when secret is wrong' do
-    before { request_logux }
     let(:logux_params) { build(:logux_params, secret: 'wrong') }
 
-    it 'returns 403' do
-      expect(last_response).to be_forbidden
-    end
+    it { is_expected.to be_forbidden }
 
-    it 'returns message and backtrace' do
-      expect(last_response.body).to eq('Wrong secret')
-    end
+    it { is_expected.to eq_body('Wrong secret') }
+  end
+
+  context 'when body is not a json' do
+    subject { post '/logux', '' }
+
+    it { is_expected.to be_bad_request }
+
+    it { is_expected.to eq_body('Wrong body') }
   end
 
   context 'when protocol is not supported' do
-    before { request_logux }
     let(:logux_params) { build(:logux_params, protocol_version: -1) }
 
-    it 'returns 400' do
-      expect(last_response).to be_bad_request
-    end
+    it { is_expected.to be_bad_request }
 
-    it 'returns message and backtrace' do
-      expect(last_response.body).to eq('Back-end protocol version is not supported')
-    end
+    it { is_expected.to eq_body('Back-end protocol version is not supported') }
   end
 
   context 'when authorization required' do
-    before { request_logux }
-
     context 'when authorized' do
       let(:logux_params) { build(:logux_batch_params) }
 
-      it 'returns approved chunk' do
-        expect(last_response).to logux_approved('219_856_768 clientid 0')
-      end
+      it { is_expected.to logux_approved('219_856_768 clientid 0') }
 
-      it 'returns resend' do
-        expect(last_response).to logux_resent('219_856_768 clientid 0')
-      end
+      it { is_expected.to logux_resent('219_856_768 clientid 0') }
     end
 
     context 'when not authorized' do
       let(:logux_params) { build(:logux_update_params) }
 
-      it 'returns correct body' do
-        expect(last_response).to logux_forbidden
-      end
+      it { is_expected.to logux_forbidden }
     end
   end
 
   context 'with proxy' do
     let(:logux_params) { build(:logux_batch_params) }
 
-    it 'returns correct chunk' do
+    it 'updates store' do
       expect { request_logux }.to change { logux_store.size }.by(1)
     end
   end
