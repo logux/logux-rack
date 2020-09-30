@@ -11,7 +11,7 @@ describe 'Request logux server' do
 
     it { is_expected.to be_forbidden }
 
-    it { is_expected.to eq_body('Wrong secret') }
+    it { is_expected.to eq_body(Logux::Rack::App::ERROR[:secret]) }
   end
 
   context 'when body is not a json' do
@@ -19,7 +19,7 @@ describe 'Request logux server' do
 
     it { is_expected.to be_bad_request }
 
-    it { is_expected.to eq_body('Wrong body') }
+    it { is_expected.to eq_body(Logux::Rack::App::ERROR[:body]) }
   end
 
   context 'when protocol is not supported' do
@@ -27,7 +27,7 @@ describe 'Request logux server' do
 
     it { is_expected.to be_bad_request }
 
-    it { is_expected.to eq_body('Back-end protocol version is not supported') }
+    it { is_expected.to eq_body(Logux::Rack::App::ERROR[:protocol]) }
   end
 
   context 'when authorization required' do

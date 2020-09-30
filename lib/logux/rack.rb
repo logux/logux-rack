@@ -95,7 +95,7 @@ module Logux
       add(undo_action, meta.undo_meta)
     end
 
-    def secret_is_valid?(meta_params)
+    def valid_secret?(meta_params)
       if configuration.secret.nil?
         logger.warn(%(Please, add secret for logux server:
                             Logux.configure do |c|
@@ -106,8 +106,12 @@ module Logux
       configuration.secret == meta_params&.dig('secret')
     end
 
-    def protocol_is_valid?(meta_params)
+    def valid_protocol?(meta_params)
       Logux::PROTOCOL_VERSION == meta_params&.dig('version')
+    end
+
+    def valid_body?(params)
+      params.is_a?(Hash)
     end
 
     def process_batch(stream:, batch:)

@@ -114,7 +114,7 @@ describe Logux, timecop: true do
       end
 
       it 'warn if secret is empty' do
-        described_class.secret_is_valid?(secret: nil)
+        described_class.valid_secret?(secret: nil)
         expect(Logux.configuration.logger).to have_received(:warn)
       end
     end

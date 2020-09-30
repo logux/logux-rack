@@ -5,6 +5,12 @@ module Logux
     LOGUX_ROOT_PATH = '/logux'
 
     class App < Sinatra::Base
+      ERROR = {
+        secret: 'Wrong secret',
+        protocol: 'Back-end protocol version is not supported',
+        body: 'Wrong body'
+      }.freeze
+
       before do
         request.body.rewind
         content_type 'application/json'
@@ -12,17 +18,20 @@ module Logux
 
       post LOGUX_ROOT_PATH do
         begin
-          halt(403, 'Wrong secret') unless Logux.secret_is_valid?(meta_params)
-          unless Logux.protocol_is_valid?(meta_params)
-            halt(400, 'Back-end protocol version is not supported')
-          end
+          validate_request!
           stream { |out| build_response(out) }
         rescue JSON::ParserError
-          halt(400, 'Wrong body')
+          halt(400, ERROR[:body])
         end
       end
 
       private
+
+      def validate_request!
+        halt(400, ERROR[:body]) unless Logux.valid_body?(logux_params)
+        halt(403, ERROR[:secret]) unless Logux.valid_secret?(meta_params)
+        halt(400, ERROR[:protocol]) unless Logux.valid_protocol?(meta_params)
+      end
 
       def build_response(out)
         logux_stream = Logux::Stream.new(out)
