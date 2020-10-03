@@ -16,8 +16,8 @@ describe 'Request logux server without action' do
       let(:action) { 'notexists/create' }
 
       it 'returns unknownAction' do
-        expect(JSON.parse(last_response.body)).to include(
-          ['unknownAction', '219_856_768 clientid 0']
+        expect(JSON.parse(last_response.body).first).to include(
+          'unknownAction', '219_856_768 clientid 0'
         )
       end
     end

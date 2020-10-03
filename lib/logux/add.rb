@@ -2,14 +2,14 @@
 
 module Logux
   class Add
-    attr_reader :client, :version, :password
+    attr_reader :client, :version, :secret
 
     def initialize(client: Logux::Client.new,
                    version: Logux::PROTOCOL_VERSION,
-                   password: Logux.configuration.password)
+                   secret: Logux.configuration.secret)
       @client = client
       @version = version
-      @password = password
+      @secret = secret
     end
 
     def call(commands)
@@ -25,7 +25,7 @@ module Logux
     def prepare_data(commands)
       {
         version: PROTOCOL_VERSION,
-        password: password,
+        secret: secret,
         commands: commands.map do |command|
           action = command.first
           meta = command[1]

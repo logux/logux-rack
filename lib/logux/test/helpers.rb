@@ -9,6 +9,10 @@ module Logux
         end
       end
 
+      def eq_body(body)
+        Logux::Test::Matchers::ResponseBody.new(body)
+      end
+
       def logux_store
         Logux::Test::Store.instance.data
       end
@@ -59,12 +63,6 @@ module Logux
       def logux_authenticated(meta = nil)
         Logux::Test::Matchers::ResponseChunks.new(
           meta: meta, includes: ['authenticated']
-        )
-      end
-
-      def logux_unauthorized(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['unauthorized']
         )
       end
 

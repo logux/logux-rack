@@ -5,28 +5,43 @@ module Logux
     LOGUX_ROOT_PATH = '/logux'
 
     class App < Sinatra::Base
+      ERROR = {
+        secret: 'Wrong secret',
+        protocol: 'Back-end protocol version is not supported',
+        body: 'Wrong body'
+      }.freeze
+
       before do
         request.body.rewind
         content_type 'application/json'
       end
 
       post LOGUX_ROOT_PATH do
-        stream do |out|
-          begin
-            logux_stream = Logux::Stream.new(out)
-            logux_stream.write('[')
-            Logux.verify_request_meta_data(meta_params)
-            Logux.process_batch(stream: logux_stream, batch: command_params)
-          rescue => e
-            handle_processing_errors(logux_stream, e)
-          ensure
-            logux_stream.write(']')
-            logux_stream.close
-          end
+        begin
+          validate_request!
+          stream { |out| build_response(out) }
+        rescue JSON::ParserError
+          halt(400, ERROR[:body])
         end
       end
 
       private
+
+      def validate_request!
+        halt(400, ERROR[:body]) unless Logux.valid_body?(logux_params)
+        halt(403, ERROR[:secret]) unless Logux.valid_secret?(meta_params)
+        halt(400, ERROR[:protocol]) unless Logux.valid_protocol?(meta_params)
+      end
+
+      def build_response(out)
+        logux_stream = Logux::Stream.new(out)
+        logux_stream.write('[')
+        Logux.process_batch(stream: logux_stream, batch: command_params)
+      rescue => e
+        handle_action_processing_errors(logux_stream, e)
+      ensure
+        logux_stream.write(']')
+      end
 
       def logux_params
         @logux_params ||= JSON.parse(request.body.read)
@@ -37,10 +52,10 @@ module Logux
       end
 
       def meta_params
-        logux_params&.slice('version', 'password')
+        logux_params&.slice('version', 'secret')
       end
 
-      def handle_processing_errors(logux_stream, exception)
+      def handle_action_processing_errors(logux_stream, exception)
         Logux.configuration.on_error&.call(exception)
         Logux.logger.error("#{exception}\n#{exception.backtrace.join("\n")}")
       ensure

@@ -13,7 +13,7 @@ require 'singleton'
 module Logux
   include Configurations
 
-  PROTOCOL_VERSION = 1
+  PROTOCOL_VERSION = 3
 
   class WithMetaError < StandardError
     attr_reader :meta
@@ -26,8 +26,8 @@ module Logux
 
   UnknownActionError = Class.new(WithMetaError)
   UnknownChannelError = Class.new(WithMetaError)
-  UnauthorizedError = Class.new(StandardError)
   ParameterMissingError = Class.new(StandardError)
+  RequestError = Class.new(StandardError)
 
   autoload :Client, 'logux/client'
   autoload :Meta, 'logux/meta'
@@ -60,7 +60,7 @@ module Logux
     logger
     logux_host
     on_error
-    password
+    secret
     render_backtrace_on_error
     verify_authorized
   ]
@@ -95,15 +95,23 @@ module Logux
       add(undo_action, meta.undo_meta)
     end
 
-    def verify_request_meta_data(meta_params)
-      if configuration.password.nil?
-        logger.warn(%(Please, add password for logux server:
+    def valid_secret?(meta_params)
+      if configuration.secret.nil?
+        logger.warn(%(Please, add secret for logux server:
                             Logux.configure do |c|
-                              c.password = 'your-password'
+                              c.secret = 'your-secret'
                             end))
       end
-      auth = configuration.password == meta_params&.dig('password')
-      raise UnauthorizedError, 'Incorrect password' unless auth
+
+      configuration.secret == meta_params&.dig('secret')
+    end
+
+    def valid_protocol?(meta_params)
+      Logux::PROTOCOL_VERSION == meta_params&.dig('version')
+    end
+
+    def valid_body?(params)
+      params.is_a?(Hash)
     end
 
     def process_batch(stream:, batch:)

@@ -6,7 +6,7 @@ describe 'Request logux server without subscribe' do
   include_context 'with request'
 
   let(:logux_params) do
-    build(:logux_subscribe_params, password: password, channel: channel)
+    build(:logux_subscribe_params, secret: secret, channel: channel)
   end
 
   context 'when verify_authorized=true' do
