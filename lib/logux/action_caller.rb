@@ -37,11 +37,13 @@ module Logux
     end
 
     def class_finder
-      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta, headers: headers)
+      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta,
+                                               headers: headers)
     end
 
     def action_controller
-      class_finder.find_action_class.new(action: action, meta: meta, headers: headers)
+      class_finder.find_action_class.new(action: action, meta: meta,
+                                         headers: headers)
     end
   end
 end

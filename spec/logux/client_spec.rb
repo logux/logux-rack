@@ -17,12 +17,18 @@ describe Logux::Client do
     }
   end
 
+  let(:first_action) do
+    { command: 'action', action: { id: 1 }, meta: a_logux_meta }
+  end
+
+  let(:second_action) do
+    { command: 'action', action: { id: 2 }, meta: a_logux_meta }
+  end
+
   describe '#post' do
     it 'performs request' do
-      expect { client.post(params) }.to send_to_logux(
-        { command: 'action', action: { id: 1 }, meta: a_logux_meta },
-        { command: 'action', action: { id: 2 }, meta: a_logux_meta }
-      )
+      expect { client.post(params) }
+        .to send_to_logux(first_action, second_action)
     end
   end
 end

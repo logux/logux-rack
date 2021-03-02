@@ -27,11 +27,15 @@ module Logux
     private
 
     def class_finder
-      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta, headers: headers)
+      @class_finder ||= Logux::ClassFinder.new(action: action,
+                                               meta: meta,
+                                               headers: headers)
     end
 
     def policy
-      class_finder.find_policy_class.new(action: action, meta: meta, headers: headers)
+      class_finder.find_policy_class.new(action: action,
+                                         meta: meta,
+                                         headers: headers)
     end
   end
 end

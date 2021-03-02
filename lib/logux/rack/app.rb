@@ -28,17 +28,23 @@ module Logux
 
       private
 
+      # rubocop:disable Metrics/LineLength
       def validate_request!
         halt(429, ERROR[:attempts]) unless Logux.throttle.allow_request(request_ip)
         halt(400, ERROR[:body]) unless Logux.valid_body?(logux_params)
+        check_secret
+        halt(400, ERROR[:protocol]) unless Logux.valid_protocol?(meta_params)
+        true
+      end
+      # rubocop:enable Metrics/LineLength
+
+      def check_secret
         if Logux.valid_secret?(meta_params)
           Logux.throttle.clear(request_ip)
         else
           Logux.throttle.remember_bad_auth(request_ip, Time.now.to_i)
           halt(403, ERROR[:secret])
         end
-        halt(400, ERROR[:protocol]) unless Logux.valid_protocol?(meta_params)
-        true
       end
 
       def build_response(out)

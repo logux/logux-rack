@@ -3,7 +3,9 @@
 require 'spec_helper'
 
 describe Logux::ClassFinder do
-  let(:finder) { described_class.new(action: action, meta: meta, headers: headers) }
+  let(:finder) do
+    described_class.new(action: action, meta: meta, headers: headers)
+  end
   let(:meta) { create(:logux_meta) }
   let(:headers) { {} }
 

@@ -7,20 +7,20 @@ describe Logux::ErrorRenderer do
   let(:meta) { create(:logux_meta, id: action_id) }
 
   describe '#message' do
-    subject { described_class.new(exception).message }
+    subject(:response) { described_class.new(exception).message }
 
     context 'when UnknownActionError' do
       let(:exception) { Logux::UnknownActionError.new(message, meta: meta) }
       let(:message) { 'test' }
 
-      it { is_expected.to eq({ answer: 'unknownAction', id: action_id }) }
+      it { is_expected.to eq(answer: 'unknownAction', id: action_id) }
     end
 
     context 'when UnknownChannelError' do
       let(:exception) { Logux::UnknownChannelError.new('test', meta: meta) }
       let(:message) { 'test' }
 
-      it { is_expected.to eq({ answer: 'unknownChannel', id: action_id }) }
+      it { is_expected.to eq(answer: 'unknownChannel', id: action_id) }
     end
 
     context 'when StandardError' do
@@ -32,7 +32,7 @@ describe Logux::ErrorRenderer do
         exception.set_backtrace(caller)
       end
 
-      it { is_expected.to eq({ answer: 'error', details: error_message }) }
+      it { is_expected.to eq(answer: 'error', details: error_message) }
     end
 
     context 'when render_backtrace_on_error is false' do
@@ -42,9 +42,10 @@ describe Logux::ErrorRenderer do
         Logux.configuration.render_backtrace_on_error = false
       end
 
-      it do
-        expect(subject).to eq(
-          { answer: 'error', details: 'Please check server logs for more information' }
+      it 'return server logs error' do
+        expect(response).to eq(
+          answer: 'error',
+          details: 'Please check server logs for more information'
         )
       end
     end

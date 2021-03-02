@@ -12,6 +12,8 @@ module Logux
       @second_meta = second_meta
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Style/GuardClause
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def call
       if first_meta && !second_meta
         return false
@@ -57,5 +59,7 @@ module Logux
 
       false
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Style/GuardClause
   end
 end

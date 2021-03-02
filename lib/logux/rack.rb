@@ -10,6 +10,7 @@ require 'rest-client'
 require 'sinatra/base'
 require 'singleton'
 
+# rubocop:disable Metrics/ModuleLength
 module Logux
   include Configurations
 
@@ -157,3 +158,4 @@ module Logux
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

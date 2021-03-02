@@ -30,18 +30,28 @@ module Logux
 
       def try_to_auth
         return if stop_process?
-        stream.write({ answer: auth_result, subprotocol: chunk.subprotocol, authId: chunk.auth_id })
+
+        stream.write(answer: auth_result,
+                     subprotocol: chunk.subprotocol,
+                     authId: chunk.auth_id)
       end
 
       def valid_subprotocol
-        unless SemanticRange.satisfies?(chunk.subprotocol, Logux.configuration.supports)
+        unless SemanticRange.satisfies?(chunk.subprotocol,
+                                        Logux.configuration.supports)
           @stop_process = true
-          stream.write({ answer: WRONG_SUBPROTOCOL, authId: chunk.auth_id, supported: Logux.configuration.supports })
+          stream.write(answer: WRONG_SUBPROTOCOL,
+                       authId: chunk.auth_id,
+                       supported: Logux.configuration.supports)
         end
       end
 
       def auth_result
-        auth_rule(chunk.user_id, chunk.token, chunk.cookie, chunk.headers) ? AUTHENTICATED : DENIED
+        if auth_rule(chunk.user_id, chunk.token, chunk.cookie, chunk.headers)
+          AUTHENTICATED
+        else
+          DENIED
+        end
       end
 
       def auth_rule(user_id, token, cookie, headers)

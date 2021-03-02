@@ -5,7 +5,9 @@ require 'spec_helper'
 describe Logux::PolicyCaller do
   subject(:call!) { policy_caller.call! }
 
-  let(:policy_caller) { described_class.new(action: action, meta: meta, headers: headers) }
+  let(:policy_caller) do
+    described_class.new(action: action, meta: meta, headers: headers)
+  end
   let(:meta) { {} }
   let(:headers) { {} }
 

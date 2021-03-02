@@ -3,7 +3,7 @@
 module Logux
   class Auth
     attr_reader :user_id, :token, :auth_id, :subprotocol, :headers, :cookie
-
+    # rubocop:disable Metrics/ParameterLists
     def initialize(user_id:, token:, cookie:, auth_id:, subprotocol:, headers:)
       @user_id = user_id
       @token = token
@@ -12,5 +12,6 @@ module Logux
       @subprotocol = subprotocol
       @headers = headers
     end
+    # rubocop:enable Metrics/ParameterLists
   end
 end

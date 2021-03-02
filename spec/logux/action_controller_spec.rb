@@ -31,7 +31,8 @@ describe Logux::ActionController do
       {
         'command' => 'action',
         'action' => back_action,
-        'meta' => a_logux_meta_with({ clients: [meta.client_id] }.merge(back_meta))
+        'meta' => a_logux_meta_with({ clients: [meta.client_id] }
+                                      .merge(back_meta))
       }
     end
 

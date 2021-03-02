@@ -7,6 +7,8 @@ AllCops:
     - 'spec/dummy/db/**/*.rb'
     - 'vendor/**/*'
     - 'gemfiles/*'
+    - 'tests/test-app/**/*'
+    - 'tests/backend-test/**/*'
   TargetRubyVersion: 2.4
 
 Metrics/BlockLength:

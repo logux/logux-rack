@@ -10,6 +10,7 @@ module Logux
         @batch = batch
       end
 
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def call
         last_chunk = batch.size - 1
         preprocessed_batch.map.with_index do |chunk, index|
@@ -21,17 +22,20 @@ module Logux
               process_auth(chunk: chunk[:auth])
             end
           rescue => e
-            handle_action_processing_errors(stream, e, chunk[:meta] ? chunk[:meta]['id'] : nil)
+            meta = chunk[:meta] ? chunk[:meta]['id'] : nil
+            handle_action_processing_errors(stream, e, meta)
           end
           stream.write(',') if index != last_chunk
         end
       end
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
       def handle_action_processing_errors(logux_stream, exception, id)
         Logux.configuration.on_error&.call(exception)
         Logux.logger.error("#{exception}\n#{exception.backtrace.join("\n")}")
       ensure
-        logux_stream.write({ id: id }.merge(Logux::ErrorRenderer.new(exception).message))
+        logux_stream
+          .write({ id: id }.merge(Logux::ErrorRenderer.new(exception).message))
       end
 
       def process_action(chunk:)

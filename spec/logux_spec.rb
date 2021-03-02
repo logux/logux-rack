@@ -18,8 +18,8 @@ describe Logux, timecop: true do
 
     it 'sends action with meta' do
       expect { described_class.add(action) }.to send_to_logux(
-        { command: 'action', action: a_logux_action_with(type: 'action'),
-          meta: a_logux_meta }
+        command: 'action', action: a_logux_action_with(type: 'action'),
+        meta: a_logux_meta
       )
     end
   end
@@ -32,6 +32,16 @@ describe Logux, timecop: true do
       ]
     end
 
+    let(:action_first) do
+      { command: 'action',
+        action: a_logux_action_with(type: 'action'), meta: a_logux_meta }
+    end
+
+    let(:action_second) do
+      { command: 'action',
+        action: a_logux_action_with(type: 'action2'), meta: a_logux_meta }
+    end
+
     describe 'http request' do
       it 'makes a request' do
         stub = stub_request(:post, described_class.configuration.logux_host)
@@ -41,12 +51,8 @@ describe Logux, timecop: true do
     end
 
     it 'sends action with meta' do
-      expect { described_class.add_batch(commands) }.to send_to_logux(
-        { command: 'action',
-          action: a_logux_action_with(type: 'action'), meta: a_logux_meta },
-        { command: 'action',
-          action: a_logux_action_with(type: 'action2'), meta: a_logux_meta }
-      )
+      expect { described_class.add_batch(commands) }
+        .to send_to_logux(action_first, action_second)
     end
   end
 

@@ -54,7 +54,7 @@ module Logux
                                                 headers: headers_from_chunk)
         policy_check = policy_caller.call!
         status = policy_check ? :approved : :forbidden
-        stream.write({ answer: status, id: meta_from_chunk.id })
+        stream.write(answer: status, id: meta_from_chunk.id)
         return stream.write(',') if policy_check
         return if policy_check
 

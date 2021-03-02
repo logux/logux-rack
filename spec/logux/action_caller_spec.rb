@@ -3,7 +3,9 @@
 require 'spec_helper'
 
 describe Logux::ActionCaller do
-  let(:action_caller) { described_class.new(action: action, meta: meta, headers: headers) }
+  let(:action_caller) do
+    described_class.new(action: action, meta: meta, headers: headers)
+  end
   let(:action) { create(:logux_action_add) }
   let(:meta) { create(:logux_meta) }
   let(:headers) { {} }

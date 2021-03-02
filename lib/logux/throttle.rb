@@ -6,9 +6,11 @@ module Logux
 
     attr_reader :cache, :duration, :num_requests, :nano
 
+    # rubocop:disable Style/ClassVars
     def self.instance
       @@instance ||= new
     end
+    # rubocop:enable Style/ClassVars
 
     def initialize
       @cache = Logux.configuration.throttle_cache
@@ -63,11 +65,7 @@ module Logux
     end
 
     def delete_cache(key)
-      if cache_type == 'ActiveSupport::Cache::MemoryStore'
-        @cache.delete(key)
-      else
-        @cache.delete(key)
-      end
+      @cache.delete(key)
     end
   end
 end
