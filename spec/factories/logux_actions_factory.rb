@@ -15,7 +15,7 @@ FactoryBot.define do
         new({
           type: 'logux/subscribe',
           channel: 'user/1',
-          since: { time: 100 }
+          since: { 'time' => 100_000 }
         }.merge(attributes))
       end
     end

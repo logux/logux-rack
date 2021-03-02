@@ -21,7 +21,7 @@ describe Logux::ChannelController do
 
     context 'when ActiveRecord defined' do
       it 'tries to find record by chanel data' do
-        expect { subscribe }.to send_to_logux(['action', { type: 'action' }])
+        expect { subscribe }.to send_to_logux({ command: 'action', action: { type: 'action' } })
       end
     end
   end

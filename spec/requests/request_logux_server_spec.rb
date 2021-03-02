@@ -3,8 +3,9 @@
 require 'spec_helper'
 
 describe 'Request logux server' do
-  include_context 'with request'
   subject { request_logux }
+
+  include_context 'with request'
 
   context 'when secret is wrong' do
     let(:logux_params) { build(:logux_params, secret: 'wrong') }
@@ -37,12 +38,6 @@ describe 'Request logux server' do
       it { is_expected.to logux_approved('219_856_768 clientid 0') }
 
       it { is_expected.to logux_resent('219_856_768 clientid 0') }
-    end
-
-    context 'when not authorized' do
-      let(:logux_params) { build(:logux_update_params) }
-
-      it { is_expected.to logux_forbidden }
     end
   end
 

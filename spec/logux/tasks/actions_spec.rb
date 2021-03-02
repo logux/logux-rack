@@ -3,12 +3,11 @@
 require 'spec_helper'
 
 describe 'rake logux:actions' do
-  include_context 'with rake'
-
   subject(:task) { -> { Rake::Task[task_name].invoke(path) } }
 
-  let(:path) { "#{Dir.pwd}/**/logux/actions" }
+  include_context 'with rake'
 
+  let(:path) { "#{Dir.pwd}/**/dummy/logux/actions" }
   let(:actions_list) do
     [
       "   action.type Class#method\n",

@@ -37,17 +37,16 @@ describe Logux::Response do
       described_class.new(
         status,
         action: action,
-        meta: meta,
-        custom_data: nil
+        meta: meta
       )
     end
 
     it 'contain custom data' do
-      expect(response.format).to eq([status, custom_data])
+      expect(response.format).to eq({ answer: status, id: meta.id, custom_data: custom_data })
     end
 
     it 'contain meta.id' do
-      expect(response_with_no_custom_data.format).to eq([status, meta.id])
+      expect(response_with_no_custom_data.format).to eq({ answer: status, id: meta.id, custom_data: nil })
     end
   end
 end

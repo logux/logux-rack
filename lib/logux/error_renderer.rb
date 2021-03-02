@@ -10,12 +10,14 @@ module Logux
 
     def message
       case exception
-      when UnknownActionError, UnknownChannelError
-        [action_response, exception.meta.id]
+      when UnknownActionError
+        { answer: 'unknownAction', id: exception.meta.id }
+      when UnknownChannelError
+        { answer: 'unknownChannel', id: exception.meta.id }
       when Logux::WithMetaError
-        ['error', exception.meta.id, stacktrace]
+        { answer: 'error', id: exception.meta.id, details: stacktrace }
       when StandardError
-        ['error', stacktrace]
+        { answer: 'error', details: stacktrace }
       end
     end
 

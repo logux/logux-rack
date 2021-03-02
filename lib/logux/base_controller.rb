@@ -12,11 +12,12 @@ module Logux
       end
     end
 
-    attr_reader :action, :meta
+    attr_reader :action, :meta, :headers
 
-    def initialize(action:, meta: {})
+    def initialize(action:, meta: {}, headers: {})
       @action = action
       @meta = meta
+      @headers = headers
     end
 
     def send_back(action, meta = {})

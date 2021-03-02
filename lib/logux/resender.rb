@@ -4,20 +4,21 @@ module Logux
   class Resender
     extend Forwardable
 
-    attr_reader :action, :meta
+    attr_reader :action, :meta, :headers
 
     def_delegators :Logux, :logger
 
-    def initialize(action:, meta:)
+    def initialize(action:, meta:, headers:)
       @action = action
       @meta = meta
+      @headers = headers
     end
 
     def call!
       return nil unless any_receivers?
       return nil unless receivers_for_action?
 
-      ['resend', meta['id'], receivers_for_action]
+      { answer: 'resend', id: meta['id'] }.merge(receivers_for_action)
     rescue Logux::UnknownActionError, Logux::UnknownChannelError => e
       logger.warn(e)
       nil
@@ -45,7 +46,7 @@ module Logux
     end
 
     def class_finder
-      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta)
+      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta, headers: headers)
     end
 
     def action_class

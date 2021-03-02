@@ -4,13 +4,14 @@ module Logux
   class PolicyCaller
     extend Forwardable
 
-    attr_reader :action, :meta
+    attr_reader :action, :meta, :headers
 
     def_delegators :Logux, :logger, :configuration
 
-    def initialize(action:, meta:)
+    def initialize(action:, meta:, headers:)
       @action = action
       @meta = meta
+      @headers = headers
     end
 
     def call!
@@ -26,11 +27,11 @@ module Logux
     private
 
     def class_finder
-      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta)
+      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta, headers: headers)
     end
 
     def policy
-      class_finder.find_policy_class.new(action: action, meta: meta)
+      class_finder.find_policy_class.new(action: action, meta: meta, headers: headers)
     end
   end
 end

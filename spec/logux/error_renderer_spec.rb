@@ -13,14 +13,14 @@ describe Logux::ErrorRenderer do
       let(:exception) { Logux::UnknownActionError.new(message, meta: meta) }
       let(:message) { 'test' }
 
-      it { is_expected.to eq(['unknownAction', action_id]) }
+      it { is_expected.to eq({ answer: 'unknownAction', id: action_id }) }
     end
 
     context 'when UnknownChannelError' do
       let(:exception) { Logux::UnknownChannelError.new('test', meta: meta) }
       let(:message) { 'test' }
 
-      it { is_expected.to eq(['unknownChannel', action_id]) }
+      it { is_expected.to eq({ answer: 'unknownChannel', id: action_id }) }
     end
 
     context 'when StandardError' do
@@ -32,7 +32,7 @@ describe Logux::ErrorRenderer do
         exception.set_backtrace(caller)
       end
 
-      it { is_expected.to eq(['error', error_message]) }
+      it { is_expected.to eq({ answer: 'error', details: error_message }) }
     end
 
     context 'when render_backtrace_on_error is false' do
@@ -43,8 +43,8 @@ describe Logux::ErrorRenderer do
       end
 
       it do
-        is_expected.to eq(
-          ['error', 'Please check server logs for more information']
+        expect(subject).to eq(
+          { answer: 'error', details: 'Please check server logs for more information' }
         )
       end
     end

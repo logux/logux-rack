@@ -13,14 +13,25 @@ module Logux
       def call
         last_chunk = batch.size - 1
         preprocessed_batch.map.with_index do |chunk, index|
-          case chunk[:type]
-          when :action
-            process_action(chunk: chunk.slice(:action, :meta))
-          when :auth
-            process_auth(chunk: chunk[:auth])
+          begin
+            case chunk[:type]
+            when :action
+              process_action(chunk: chunk.slice(:action, :meta, :headers))
+            when :auth
+              process_auth(chunk: chunk[:auth])
+            end
+          rescue => e
+            handle_action_processing_errors(stream, e, chunk[:meta] ? chunk[:meta]['id'] : nil)
           end
           stream.write(',') if index != last_chunk
         end
+      end
+
+      def handle_action_processing_errors(logux_stream, exception, id)
+        Logux.configuration.on_error&.call(exception)
+        Logux.logger.error("#{exception}\n#{exception.backtrace.join("\n")}")
+      ensure
+        logux_stream.write({ id: id }.merge(Logux::ErrorRenderer.new(exception).message))
       end
 
       def process_action(chunk:)
@@ -33,7 +44,7 @@ module Logux
 
       def preprocessed_batch
         @preprocessed_batch ||= batch.map do |chunk|
-          case chunk[0]
+          case chunk['command']
           when 'action'
             preprocess_action(chunk)
           when 'auth'
@@ -44,15 +55,19 @@ module Logux
 
       def preprocess_action(chunk)
         { type: :action,
-          action: Logux::Action.new(chunk[1]),
-          meta: Logux::Meta.new(chunk[2]) }
+          action: Logux::Action.new(chunk['action']),
+          meta: Logux::Meta.new(chunk['meta']),
+          headers: chunk['headers'] }
       end
 
       def preprocess_auth(chunk)
         { type: :auth,
-          auth: Logux::Auth.new(user_id: chunk[1],
-                                credentials: chunk[2],
-                                auth_id: chunk[3]) }
+          auth: Logux::Auth.new(user_id: chunk['userId'],
+                                auth_id: chunk['authId'],
+                                subprotocol: chunk['subprotocol'],
+                                token: chunk['token'],
+                                cookie: chunk['cookie'],
+                                headers: chunk['headers']) }
       end
     end
   end

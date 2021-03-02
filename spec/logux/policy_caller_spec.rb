@@ -5,8 +5,9 @@ require 'spec_helper'
 describe Logux::PolicyCaller do
   subject(:call!) { policy_caller.call! }
 
-  let(:policy_caller) { described_class.new(action: action, meta: meta) }
+  let(:policy_caller) { described_class.new(action: action, meta: meta, headers: headers) }
   let(:meta) { {} }
+  let(:headers) { {} }
 
   context 'when request is not verified' do
     let(:action) { create(:logux_action_unknown) }

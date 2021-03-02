@@ -13,7 +13,7 @@ require 'singleton'
 module Logux
   include Configurations
 
-  PROTOCOL_VERSION = 3
+  PROTOCOL_VERSION = 4
 
   class WithMetaError < StandardError
     attr_reader :meta
@@ -52,6 +52,8 @@ module Logux
   autoload :ErrorRenderer, 'logux/error_renderer'
   autoload :Utils, 'logux/utils'
   autoload :ActionWatcher, 'logux/action_watcher'
+  autoload :IsFirstOlder, 'logux/is_first_older'
+  autoload :Throttle, 'logux/throttle'
 
   configurable %i[
     action_watcher
@@ -61,19 +63,27 @@ module Logux
     logux_host
     on_error
     secret
+    subprotocol
+    supports
     render_backtrace_on_error
     verify_authorized
+    throttle_cache
+    throttle_settings
   ]
 
   configuration_defaults do |config|
     config.logux_host = 'localhost:1338'
     config.verify_authorized = true
-    config.logger = ::Logger.new(STDOUT)
+    config.logger = ::Logger.new($stdout)
     config.on_error = proc {}
     config.auth_rule = proc { false }
     config.render_backtrace_on_error = true
     config.action_watcher = Logux::ActionWatcher
     config.action_watcher_options = {}
+    config.subprotocol = '1.0.0'
+    config.supports = '^1.0.0'
+    config.throttle_settings = { num_requests: 3, duration: 5 }
+    config.throttle_cache = {}
   end
 
   module Rack
@@ -114,6 +124,10 @@ module Logux
       params.is_a?(Hash)
     end
 
+    def allow_request?
+      true
+    end
+
     def process_batch(stream:, batch:)
       Logux::Process::Batch.new(stream: stream, batch: batch).call
     end
@@ -130,12 +144,16 @@ module Logux
       configuration.action_watcher.new(configuration.action_watcher_options)
     end
 
-    def watch_action
-      action_watcher.call { yield }
+    def watch_action(&block)
+      action_watcher.call(&block)
     end
 
     def application
       Logux::Rack::App
+    end
+
+    def throttle
+      Logux::Throttle.instance
     end
   end
 end

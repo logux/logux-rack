@@ -119,6 +119,17 @@ Run tests with:
 docker-compose run app bundle exec rspec
 ```
 
+Integration tests (folder test):
+
+```bash
+bundle instal
+bundle exec rails s
+```
+Run [backend test](https://github.com/logux/backend-test)
+```bash
+npx @logux/backend-test http://localhost:3000/logux
+```
+
 Run RuboCop with:
 
 ```bash

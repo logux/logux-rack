@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 describe 'rake logux:channels' do
-  include_context 'with rake'
-
   subject(:task) { -> { Rake::Task[task_name].invoke(path) } }
+
+  include_context 'with rake'
 
   let(:path) { "#{Dir.pwd}/**/dummy/app/logux" }
 

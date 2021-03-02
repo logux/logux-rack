@@ -29,7 +29,7 @@ module Logux
         commands: commands.map do |command|
           action = command.first
           meta = command[1]
-          ['action', action, meta || Meta.new]
+          { command: 'action', action: action, meta: meta || Meta.new }
         end
       }
     end

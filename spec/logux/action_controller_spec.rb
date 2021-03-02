@@ -28,11 +28,11 @@ describe Logux::ActionController do
     let(:back_meta) { { 'meta_key' => 'meta_value' } }
 
     let(:expected_commands) do
-      [
-        'action',
-        back_action,
-        a_logux_meta_with({ clients: [meta.client_id] }.merge(back_meta))
-      ]
+      {
+        'command' => 'action',
+        'action' => back_action,
+        'meta' => a_logux_meta_with({ clients: [meta.client_id] }.merge(back_meta))
+      }
     end
 
     it 'makes request with correct clients' do
