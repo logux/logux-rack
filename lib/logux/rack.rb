@@ -125,10 +125,6 @@ module Logux
       params.is_a?(Hash)
     end
 
-    def allow_request?
-      true
-    end
-
     def process_batch(stream:, batch:)
       Logux::Process::Batch.new(stream: stream, batch: batch).call
     end
