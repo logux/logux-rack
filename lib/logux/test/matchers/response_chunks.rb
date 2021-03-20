@@ -32,14 +32,14 @@ module Logux
 
         def match_includes?
           @actual.any? do |command|
-            includes.include?(command.first) &&
-              (meta.nil? || (!meta.empty? && command[1] == meta))
+            includes.include?(command['answer']) &&
+              (meta.nil? || (!meta.empty? && command['id'] == meta))
           end
         end
 
         def match_excludes?
           @actual.empty? || @actual.none? do |command|
-            excludes.include?(command.first)
+            excludes.include?(command['answer'])
           end
         end
       end

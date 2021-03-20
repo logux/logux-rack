@@ -2,13 +2,14 @@
 
 module Logux
   class ClassFinder
-    attr_reader :action, :meta
+    attr_reader :action, :meta, :headers
 
     using Logux::Utils
 
-    def initialize(action:, meta:)
+    def initialize(action:, meta:, headers:)
       @action = action
       @meta = meta
+      @headers = headers
     end
 
     def find_action_class
@@ -33,7 +34,8 @@ module Logux
       if subscribe?
         action.channel_name.camelize
       else
-        action.type.split('/')[0..-2].map(&:camelize).join('::')
+        name = action.type.split('/')[0..-2]
+        name.present? ? name.map(&:camelize).join('::') : action.type.camelize
       end
     end
 

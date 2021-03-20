@@ -18,3 +18,8 @@ coverage
 Gemfile.lock
 spec/dummy/db/*.sqlite3
 /gemfiles/*
+# test application
+/tests/backend-test/node_modules
+/tests/test-app/tmp
+/tests/test-app/log
+/tests/test-app/db/development.sqlite3

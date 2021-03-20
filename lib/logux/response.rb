@@ -12,7 +12,7 @@ module Logux
     end
 
     def format
-      [status, custom_data || meta.id]
+      { answer: status, id: meta.id, custom_data: custom_data }
     end
   end
 end

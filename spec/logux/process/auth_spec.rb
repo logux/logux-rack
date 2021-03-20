@@ -14,8 +14,11 @@ describe Logux::Process::Auth do
   let(:chunk) do
     Logux::Auth.new(
       user_id: 'sample_user-id',
-      credentials: 'sample-credentials',
-      auth_id: 'sample-auth-id'
+      auth_id: 'sample-auth-id',
+      token: 'sample-token',
+      cookie: 'sample-cookie',
+      subprotocol: '1.0.0',
+      headers: 'sample-headers'
     )
   end
 

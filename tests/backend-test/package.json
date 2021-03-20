@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "devDependencies": {
+    "@logux/backend-test": "^4.0.11"
+  }
+}

@@ -3,9 +3,12 @@
 require 'spec_helper'
 
 describe Logux::Resender do
-  let(:resender) { described_class.new(action: action, meta: meta) }
+  let(:resender) do
+    described_class.new(action: action, meta: meta, headers: headers)
+  end
   let(:action) { create(:logux_action_add) }
   let(:meta) { create(:logux_meta) }
+  let(:headers) { {} }
 
   describe '#call!' do
     subject(:result) { resender.call! }
@@ -83,7 +86,9 @@ describe Logux::Resender do
         Actions.send :remove_const, :User
       end
 
-      it { is_expected.to eq(['resend', meta['id'], channel: 'users']) }
+      it 'is expected eq resend' do
+        is_expected.to eq(answer: 'resend', channel: 'users', id: meta['id'])
+      end
     end
   end
 end

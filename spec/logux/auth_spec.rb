@@ -6,13 +6,19 @@ describe Logux::Auth do
   subject(:auth) do
     described_class.new(
       user_id: user_id,
-      credentials: credentials,
+      token: token,
+      cookie: cookie,
+      subprotocol: subprotocol,
+      headers: headers,
       auth_id: auth_id
     )
   end
 
   let(:user_id) { '123' }
-  let(:credentials) { 'sample-credentials' }
+  let(:token) { 'token' }
+  let(:cookie) { 'cookie' }
+  let(:subprotocol) { '1.0.0' }
+  let(:headers) { 'headers' }
   let(:auth_id) { 'sample-auth-id' }
 
   describe '#new' do
@@ -20,8 +26,20 @@ describe Logux::Auth do
       expect(auth.user_id).to eq(user_id)
     end
 
-    it 'exposes credentials' do
-      expect(auth.credentials).to eq(credentials)
+    it 'exposes token' do
+      expect(auth.token).to eq(token)
+    end
+
+    it 'exposes cookie' do
+      expect(auth.cookie).to eq(cookie)
+    end
+
+    it 'exposes headers' do
+      expect(auth.headers).to eq(headers)
+    end
+
+    it 'exposes subprotocol' do
+      expect(auth.subprotocol).to eq(subprotocol)
     end
 
     it 'exposes auth_id' do

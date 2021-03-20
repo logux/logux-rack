@@ -16,8 +16,8 @@ module Logux
 
     def since_time
       @since_time ||= begin
-        since = action[:since]&.send(:[], :time)
-        Time.at(since).to_datetime if since
+        since = action[:since]&.send(:[], 'time')
+        Time.at(since / 1000).to_datetime if since
       end
     end
   end

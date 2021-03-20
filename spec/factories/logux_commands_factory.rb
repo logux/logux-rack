@@ -5,15 +5,15 @@ FactoryBot.define do
     skip_create
 
     initialize_with do
-      [
-        'action',
-        attributes[:action],
-        {
+      {
+        command: 'action',
+        action: attributes[:action],
+        meta: {
           time: Time.now.to_i,
           id: '219_856_768 clientid 0',
           userId: 1
         }
-      ]
+      }
     end
 
     factory :subscribe_command do
