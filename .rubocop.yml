@@ -4,13 +4,13 @@ require: rubocop-rspec
 
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 2.7
   Exclude:
     - 'spec/dummy/db/**/*.rb'
     - 'vendor/**/*'
     - 'gemfiles/*'
     - 'tests/test-app/**/*'
     - 'tests/backend-test/**/*'
-  TargetRubyVersion: 2.4
 
 Metrics/BlockLength:
   Exclude:
