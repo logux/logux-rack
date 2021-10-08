@@ -34,3 +34,6 @@ Style/RescueStandardError:
 
 Style/DateTime:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
