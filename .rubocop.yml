@@ -41,3 +41,6 @@ RSpec/MultipleMemoizedHelpers:
 
 Layout/LineEndStringConcatenationIndentation:
   EnforcedStyle: indented
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
