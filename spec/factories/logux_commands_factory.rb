@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :logux_command, class: Array do
+  factory :logux_command, class: 'Array' do
     skip_create
 
     initialize_with do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :logux_action, class: Logux::Action do
+  factory :logux_action, class: 'Logux::Action' do
     factory :logux_action_subscribe do
       skip_create
       initialize_with do
