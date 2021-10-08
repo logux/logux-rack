@@ -38,3 +38,6 @@ Style/DateTime:
 
 RSpec/MultipleMemoizedHelpers:
   Max: 10
+
+Layout/LineEndStringConcatenationIndentation:
+  EnforcedStyle: indented
