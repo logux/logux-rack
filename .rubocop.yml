@@ -26,9 +26,6 @@ RSpec/DescribeClass:
     - 'spec/logux/tasks/*.rb'
     - 'spec/requests/*.rb'
 
-FactoryBot/StaticAttributeDefinedDynamically:
-  Enabled: false
-
 RSpec/ExpectChange:
   EnforcedStyle: block
 
