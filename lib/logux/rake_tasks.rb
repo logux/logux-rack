@@ -6,13 +6,7 @@ require_relative 'rack'
 
 module Logux
   class RakeTasks < ::Rake::TaskLib
-    attr_accessor :name
-    attr_accessor :verbose
-    attr_accessor :fail_on_error
-    attr_accessor :patterns
-    attr_accessor :formatters
-    attr_accessor :requires
-    attr_accessor :options
+    attr_accessor :name, :verbose, :fail_on_error, :patterns, :formatters, :requires, :options
 
     using Logux::Utils
 
