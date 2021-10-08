@@ -2,11 +2,10 @@ version: '3.4'
 
 services:
   app:
-    image: ruby:2.5.7
+    image: ruby:2
     environment:
       - BUNDLE_PATH=/bundle
       - BUNDLE_CONFIG=/app/.bundle/config
-
       - DB_HOST=db
       - DB_NAME=logux_rack
       - DB_USERNAME=postgres
