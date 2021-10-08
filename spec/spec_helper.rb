@@ -2,12 +2,8 @@
 
 require 'simplecov'
 
-SimpleCov::Formatter::MultiFormatter.new([
-                                           SimpleCov::Formatter::HTMLFormatter,
-                                           Coveralls::SimpleCov::Formatter
-                                         ])
-Coveralls.wear!
 SimpleCov.start do
+  formatter SimpleCov::Formatter::HTMLFormatter
   add_filter '/spec/'
   add_filter '/lib/logux/test/'
 end
