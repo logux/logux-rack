@@ -17,6 +17,9 @@ Metrics/BlockLength:
     - 'logux-rack.gemspec'
     - 'lib/logux/test/helpers.rb'
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 RSpec/DescribeClass:
   Exclude:
     - 'spec/logux/tasks/*.rb'
