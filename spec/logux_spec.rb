@@ -2,7 +2,7 @@
 
 describe Logux, timecop: true do
   it 'has a version number' do
-    expect(Logux::VERSION).not_to be nil
+    expect(Logux::Rack::VERSION).not_to be nil
   end
 
   describe '.add' do
