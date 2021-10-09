@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'colorize'
 require 'configurations'
 require 'forwardable'
 require 'json'

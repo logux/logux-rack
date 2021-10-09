@@ -45,7 +45,6 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'colorize'
   spec.add_dependency 'configurations'
   spec.add_dependency 'nanoid'
   spec.add_dependency 'rack', '~> 2.0'
@@ -53,7 +52,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'semantic_range'
   spec.add_dependency 'sinatra', '>= 2.0', '< 3'
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'pry-byebug'
