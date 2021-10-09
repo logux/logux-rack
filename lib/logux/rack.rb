@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'configurations'
 require 'forwardable'
 require 'json'
 require 'logger'
@@ -9,10 +8,7 @@ require 'rest-client'
 require 'sinatra/base'
 require 'singleton'
 
-# rubocop:disable Metrics/ModuleLength
 module Logux
-  include Configurations
-
   PROTOCOL_VERSION = 4
 
   class WithMetaError < StandardError
@@ -54,37 +50,6 @@ module Logux
   autoload :ActionWatcher, 'logux/action_watcher'
   autoload :IsFirstOlder, 'logux/is_first_older'
   autoload :Throttle, 'logux/throttle'
-
-  configurable %i[
-    action_watcher
-    action_watcher_options
-    auth_rule
-    logger
-    logux_host
-    on_error
-    secret
-    subprotocol
-    supports
-    render_backtrace_on_error
-    verify_authorized
-    throttle_cache
-    throttle_settings
-  ]
-
-  configuration_defaults do |config|
-    config.logux_host = 'localhost:1338'
-    config.verify_authorized = true
-    config.logger = ::Logger.new($stdout)
-    config.on_error = proc {}
-    config.auth_rule = proc { false }
-    config.render_backtrace_on_error = true
-    config.action_watcher = Logux::ActionWatcher
-    config.action_watcher_options = {}
-    config.subprotocol = '1.0.0'
-    config.supports = '^1.0.0'
-    config.throttle_settings = { num_requests: 3, duration: 5 }
-    config.throttle_cache = {}
-  end
 
   module Rack
     autoload :App, 'logux/rack/app'
@@ -153,4 +118,3 @@ module Logux
     end
   end
 end
-# rubocop:enable Metrics/ModuleLength
