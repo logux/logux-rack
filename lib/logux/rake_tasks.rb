@@ -6,9 +6,9 @@ require_relative 'rack'
 
 module Logux
   class RakeTasks < ::Rake::TaskLib
-    attr_accessor :name, :verbose, :fail_on_error, :patterns, :formatters, :requires, :options
+    include Logux::Utils
 
-    using Logux::Utils
+    attr_accessor :name, :verbose, :fail_on_error, :patterns, :formatters, :requires, :options
 
     ACTIONS_NAMESPACE = 'Actions'
     CHANNELS_NAMESPACE = 'Channels'
@@ -94,7 +94,7 @@ module Logux
     end
 
     def strip_namespace(klass, namespace)
-      klass.name.gsub(/^#{namespace}::/, '').underscore
+      underscore(klass.name.gsub(/^#{namespace}::/, ''))
     end
 
     def descendants_of(parent)

@@ -16,12 +16,7 @@ describe Logux::Policy do
   let(:headers) { {} }
 
   describe '#new' do
-    it 'exposes action' do
-      expect(policy.action).to eq(action)
-    end
-
-    it 'exposes meta' do
-      expect(policy.meta).to eq(meta)
-    end
+    it { expect(policy.action).to eq(action) }
+    it { expect(policy.meta).to eq(meta) }
   end
 end

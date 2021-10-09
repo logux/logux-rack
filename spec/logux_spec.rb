@@ -27,19 +27,25 @@ describe Logux, timecop: true do
   describe '.add_batch' do
     let(:commands) do
       [
-        [{ 'type': 'action' }],
-        [{ 'type': 'action2' }]
+        [{ type: 'action' }],
+        [{ type: 'action2' }]
       ]
     end
 
     let(:action_first) do
-      { command: 'action',
-        action: a_logux_action_with(type: 'action'), meta: a_logux_meta }
+      {
+        command: 'action',
+        action: a_logux_action_with(type: 'action'),
+        meta: a_logux_meta
+      }
     end
 
     let(:action_second) do
-      { command: 'action',
-        action: a_logux_action_with(type: 'action2'), meta: a_logux_meta }
+      {
+        command: 'action',
+        action: a_logux_action_with(type: 'action2'),
+        meta: a_logux_meta
+      }
     end
 
     describe 'http request' do
@@ -93,9 +99,11 @@ describe Logux, timecop: true do
 
     context 'when data provided' do
       let(:request) do
-        described_class.undo(meta,
-                             reason: reason,
-                             data: { errors: ['limitExceeded'] })
+        described_class.undo(
+          meta,
+          reason: reason,
+          data: { errors: ['limitExceeded'] }
+        )
       end
       let(:logux_commands) do
         {

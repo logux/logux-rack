@@ -32,4 +32,5 @@ module Logux
     autoload :Matchers, 'logux/test/matchers'
   end
 end
+
 Logux::Client.prepend Logux::Test::Client

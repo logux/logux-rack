@@ -6,6 +6,7 @@ describe Logux::ActionCaller do
   let(:action_caller) do
     described_class.new(action: action, meta: meta, headers: headers)
   end
+
   let(:action) { create(:logux_action_add) }
   let(:meta) { create(:logux_meta) }
   let(:headers) { {} }
@@ -29,9 +30,7 @@ describe Logux::ActionCaller do
         Actions.send :remove_const, :User
       end
 
-      it 'return ok' do
-        expect(result.status).to eq(:ok)
-      end
+      it { expect(result.status).to eq(:ok) }
     end
   end
 end

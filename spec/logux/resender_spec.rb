@@ -4,8 +4,13 @@ require 'spec_helper'
 
 describe Logux::Resender do
   let(:resender) do
-    described_class.new(action: action, meta: meta, headers: headers)
+    described_class.new(
+      action: action,
+      meta: meta,
+      headers: headers
+    )
   end
+
   let(:action) { create(:logux_action_add) }
   let(:meta) { create(:logux_meta) }
   let(:headers) { {} }
@@ -14,7 +19,7 @@ describe Logux::Resender do
     subject(:result) { resender.call! }
 
     context 'without existing action class' do
-      it { is_expected.to be_nil }
+      it { expect(result).to be_nil }
     end
 
     context 'when no receivers are defined' do
@@ -37,7 +42,7 @@ describe Logux::Resender do
         Actions.send :remove_const, :User
       end
 
-      it { is_expected.to be_nil }
+      it { expect(result).to be_nil }
     end
 
     context 'when no receivers for this actions are defined' do
@@ -64,7 +69,7 @@ describe Logux::Resender do
         Actions.send :remove_const, :User
       end
 
-      it { is_expected.to be_nil }
+      it { expect(result).to be_nil }
     end
 
     context 'with defined receivers' do
@@ -87,7 +92,7 @@ describe Logux::Resender do
       end
 
       it 'is expected eq resend' do
-        is_expected.to eq(answer: 'resend', channel: 'users', id: meta['id'])
+        expect(result).to eq(answer: 'resend', channel: 'users', id: meta['id'])
       end
     end
   end

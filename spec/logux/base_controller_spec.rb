@@ -8,8 +8,6 @@ describe Logux::BaseController do
   let(:meta) { Logux::Meta.new }
 
   describe 'accessors' do
-    it 'exposes node_id' do
-      expect(controller.node_id).to eq(meta.node_id)
-    end
+    it { expect(controller.node_id).to eq(meta.node_id) }
   end
 end

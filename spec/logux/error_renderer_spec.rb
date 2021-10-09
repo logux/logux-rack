@@ -28,9 +28,7 @@ describe Logux::ErrorRenderer do
       let(:error_message) { "#{message}\n#{exception.backtrace.join("\n")}" }
       let(:message) { 'test' }
 
-      before do
-        exception.set_backtrace(caller)
-      end
+      before { exception.set_backtrace(caller) }
 
       it { is_expected.to eq(answer: 'error', details: error_message) }
     end
@@ -38,9 +36,7 @@ describe Logux::ErrorRenderer do
     context 'when render_backtrace_on_error is false' do
       let(:exception) { StandardError.new }
 
-      before do
-        Logux.configuration.render_backtrace_on_error = false
-      end
+      before { Logux.configuration.render_backtrace_on_error = false }
 
       it 'return server logs error' do
         expect(response).to eq(

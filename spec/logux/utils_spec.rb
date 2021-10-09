@@ -3,18 +3,15 @@
 require 'spec_helper'
 
 describe Logux::Utils do
-  describe '.underscore' do
-    using described_class
+  describe '#underscore' do
+    subject(:klass) { Class.new { include Logux::Utils }.new }
 
-    let(:class_name) { 'HelloWorld' }
-    let(:scoped_name) { 'Hello::World' }
-
-    it 'underscores camel-cased class name' do
-      expect(class_name.underscore).to eq('hello_world')
+    context 'with unscoped class name' do
+      it { expect(klass.underscore('HelloWorld')).to eq('hello_world') }
     end
 
-    it 'can process scoped class name' do
-      expect(scoped_name.underscore).to eq('hello/world')
+    context 'with scoped class name' do
+      it { expect(klass.underscore('Hello::World')).to eq('hello/world') }
     end
   end
 end

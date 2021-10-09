@@ -9,10 +9,14 @@ describe Logux::Add, timecop: true do
     let(:action) { { id: 1 } }
     let(:meta) { create(:logux_meta) }
 
-    it 'return processed' do
-      expect { request.call([[action, meta]]) }.to send_to_logux(
-        command: 'action', action: { id: 1 }, meta: a_logux_meta
-      )
+    let(:expected) do
+      {
+        command: 'action',
+        action: { id: 1 },
+        meta: a_logux_meta
+      }
     end
+
+    it { expect { request.call([[action, meta]]) }.to send_to_logux(expected) }
   end
 end

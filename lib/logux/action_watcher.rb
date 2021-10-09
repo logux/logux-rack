@@ -10,7 +10,6 @@ module Logux
 
     def initialize(options = {})
       raise ArgumentError, :options unless options.is_a?(Hash)
-
       @options = options
     end
 

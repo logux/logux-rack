@@ -33,43 +33,38 @@ module Logux
 
       def logux_approved(meta = nil)
         Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['approved'], excludes: %w[forbidden error]
+          meta: meta,
+          includes: ['approved'],
+          excludes: %w[forbidden error]
         )
       end
 
       def logux_resent(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(meta: meta,
-                                                  includes: ['resend'])
+        Logux::Test::Matchers::ResponseChunks.new(meta: meta, includes: ['resend'])
       end
 
       def logux_processed(meta = nil)
         Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['processed'], excludes: %w[forbidden error]
+          meta: meta,
+          includes: ['processed'],
+          excludes: %w[forbidden error]
         )
       end
 
       def logux_forbidden(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['forbidden']
-        )
+        Logux::Test::Matchers::ResponseChunks.new(meta: meta, includes: ['forbidden'])
       end
 
       def logux_errored(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['error']
-        )
+        Logux::Test::Matchers::ResponseChunks.new(meta: meta, includes: ['error'])
       end
 
       def logux_authenticated(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['authenticated']
-        )
+        Logux::Test::Matchers::ResponseChunks.new(meta: meta, includes: ['authenticated'])
       end
 
       def logux_denied(meta = nil)
-        Logux::Test::Matchers::ResponseChunks.new(
-          meta: meta, includes: ['denied']
-        )
+        Logux::Test::Matchers::ResponseChunks.new(meta: meta, includes: ['denied'])
       end
     end
   end

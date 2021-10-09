@@ -10,15 +10,16 @@ describe Logux::ActionController do
   describe '#respond' do
     subject(:response) { action_controller.respond(:processed) }
 
-    it 'returns logux response' do
-      expect(response).to have_attributes(
-        status: :processed, action: action, custom_data: nil
-      )
+    let(:expected) do
+      {
+        status: :processed,
+        action: action,
+        custom_data: nil
+      }
     end
 
-    it 'sets the meta with time' do
-      expect(response.meta).to have_key('time')
-    end
+    it { expect(response).to have_attributes(**expected) }
+    it { expect(response.meta).to have_key('time') }
   end
 
   describe '#send_back' do
@@ -31,8 +32,9 @@ describe Logux::ActionController do
       {
         'command' => 'action',
         'action' => back_action,
-        'meta' => a_logux_meta_with({ clients: [meta.client_id] }
-                                      .merge(back_meta))
+        'meta' => a_logux_meta_with(
+          { clients: [meta.client_id] }.merge(back_meta)
+        )
       }
     end
 
@@ -52,6 +54,7 @@ describe Logux::ActionController do
     before do
       local_action_type = action_type.split('/').last
       local_receivers = receivers
+
       described_class.class_eval do
         resend local_action_type, local_receivers
         resend 'not_existing_action', 'another' => 'receivers'
@@ -72,9 +75,7 @@ describe Logux::ActionController do
 
     context 'when receivers is a lambda using action' do
       let(:receivers) do
-        lambda { |action|
-          { 'channel' => "post/#{action.channel_id}" }
-        }
+        ->(action) { { 'channel' => "post/#{action.channel_id}" } }
       end
 
       it 'returns receivers as lambda result' do
