@@ -7,8 +7,8 @@ require 'logux/rack/version'
 Gem::Specification.new do |spec|
   spec.name          = 'logux-rack'
   spec.version       = Logux::Rack::VERSION
-  spec.authors       = ['WildDima']
-  spec.email         = ['dtopornin@gmail.com']
+  spec.authors       = ['WildDima', 'Alex Musayev']
+  spec.email         = ['dtopornin@gmail.com', 'alex.musayev@gmail.com']
   spec.summary       = 'Rack application backend for Logux proxy server'
 
   spec.description   = %(
