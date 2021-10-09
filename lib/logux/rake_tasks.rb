@@ -13,7 +13,7 @@ module Logux
     ACTIONS_NAMESPACE = 'Actions'
     CHANNELS_NAMESPACE = 'Channels'
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def initialize(name = :logux)
       setup(name)
       namespace(name) do
@@ -32,7 +32,7 @@ module Logux
         end
       end
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     protected
 

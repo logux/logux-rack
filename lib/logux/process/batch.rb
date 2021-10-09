@@ -10,7 +10,7 @@ module Logux
         @batch = batch
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
       def call
         last_chunk = batch.size - 1
         preprocessed_batch.map.with_index do |chunk, index|
@@ -28,7 +28,7 @@ module Logux
           stream.write(',') if index != last_chunk
         end
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize
 
       def handle_action_processing_errors(logux_stream, exception, id)
         Logux.configuration.on_error&.call(exception)

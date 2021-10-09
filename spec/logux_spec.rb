@@ -2,7 +2,7 @@
 
 describe Logux, timecop: true do
   it 'has a version number' do
-    expect(Logux::VERSION).not_to be nil
+    expect(Logux::Rack::VERSION).not_to be nil
   end
 
   describe '.add' do
@@ -116,15 +116,15 @@ describe Logux, timecop: true do
     end
 
     describe 'logging' do
+      let(:logger) { instance_double(Logger, warn: true) }
+
       before do
-        fake_logger = double
-        allow(fake_logger).to receive(:warn)
-        described_class.configuration.logger = fake_logger
+        allow(described_class).to receive(:logger).and_return(logger)
       end
 
       it 'warn if secret is empty' do
         described_class.valid_secret?(secret: nil)
-        expect(described_class.configuration.logger).to have_received(:warn)
+        expect(logger).to have_received(:warn)
       end
     end
   end

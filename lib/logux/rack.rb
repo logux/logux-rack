@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'configurations'
 require 'forwardable'
 require 'json'
 require 'logger'
@@ -9,10 +8,7 @@ require 'rest-client'
 require 'sinatra/base'
 require 'singleton'
 
-# rubocop:disable Metrics/ModuleLength
 module Logux
-  include Configurations
-
   PROTOCOL_VERSION = 4
 
   class WithMetaError < StandardError
@@ -29,6 +25,7 @@ module Logux
   ParameterMissingError = Class.new(StandardError)
   RequestError = Class.new(StandardError)
 
+  autoload :Configuration, 'logux/configuration'
   autoload :Client, 'logux/client'
   autoload :Meta, 'logux/meta'
   autoload :Action, 'logux/action'
@@ -55,42 +52,19 @@ module Logux
   autoload :IsFirstOlder, 'logux/is_first_older'
   autoload :Throttle, 'logux/throttle'
 
-  configurable %i[
-    action_watcher
-    action_watcher_options
-    auth_rule
-    logger
-    logux_host
-    on_error
-    secret
-    subprotocol
-    supports
-    render_backtrace_on_error
-    verify_authorized
-    throttle_cache
-    throttle_settings
-  ]
-
-  configuration_defaults do |config|
-    config.logux_host = 'localhost:1338'
-    config.verify_authorized = true
-    config.logger = ::Logger.new($stdout)
-    config.on_error = proc {}
-    config.auth_rule = proc { false }
-    config.render_backtrace_on_error = true
-    config.action_watcher = Logux::ActionWatcher
-    config.action_watcher_options = {}
-    config.subprotocol = '1.0.0'
-    config.supports = '^1.0.0'
-    config.throttle_settings = { num_requests: 3, duration: 5 }
-    config.throttle_cache = {}
-  end
-
   module Rack
     autoload :App, 'logux/rack/app'
   end
 
   class << self
+    def configure
+      yield(configuration)
+    end
+
+    def configuration
+      @configuration ||= Logux::Configuration.new
+    end
+
     def add(action, meta = Meta.new)
       Logux::Add.new.call([[action, meta]])
     end
@@ -106,13 +80,7 @@ module Logux
     end
 
     def valid_secret?(meta_params)
-      if configuration.secret.nil?
-        logger.warn(%(Please, add secret for logux server:
-                            Logux.configure do |c|
-                              c.secret = 'your-secret'
-                            end))
-      end
-
+      logger.warn('Please, define Logux server secret') unless configuration.secret
       configuration.secret == meta_params&.dig('secret')
     end
 
@@ -153,4 +121,3 @@ module Logux
     end
   end
 end
-# rubocop:enable Metrics/ModuleLength
