@@ -14,7 +14,6 @@ module Logux
 
     def write(payload)
       processed_payload = process(payload)
-      Logux.logger.debug("Write to Logux response: #{processed_payload}")
       stream << processed_payload
     end
 

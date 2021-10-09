@@ -24,7 +24,6 @@ module Logux
     protected
 
     def call_action
-      logger.debug("Searching Logux action: #{action}, meta: #{meta}")
       format(action_controller.public_send(action.action_type))
     end
 

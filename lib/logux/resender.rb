@@ -27,13 +27,11 @@ module Logux
 
     def any_receivers?
       return true if action_class.respond_to? :receivers_by_action
-      logger.debug("No resend receivers are set for #{action_class}")
       false
     end
 
     def receivers_for_action?
       return true if receivers_for_action.present?
-      logger.debug("No resend receivers are set for #{action_class}")
       false
     end
 
