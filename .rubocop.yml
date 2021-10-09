@@ -1,7 +1,8 @@
 inherit_from: .rubocop_todo.yml
 
-require: rubocop-rake
-require: rubocop-rspec
+require:
+  - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
@@ -12,6 +13,12 @@ AllCops:
     - 'gemfiles/*'
     - 'tests/test-app/**/*'
     - 'tests/backend-test/**/*'
+
+Layout/LineEndStringConcatenationIndentation:
+  EnforcedStyle: indented
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
 
 Metrics/BlockLength:
   Exclude:
@@ -30,17 +37,11 @@ RSpec/DescribeClass:
 RSpec/ExpectChange:
   EnforcedStyle: block
 
-Style/RescueStandardError:
-  EnforcedStyle: implicit
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
 
 Style/DateTime:
   Enabled: false
 
-RSpec/MultipleMemoizedHelpers:
-  Max: 10
-
-Layout/LineEndStringConcatenationIndentation:
-  EnforcedStyle: indented
-
-Layout/EmptyLineAfterGuardClause:
+Style/Documentation:
   Enabled: false
