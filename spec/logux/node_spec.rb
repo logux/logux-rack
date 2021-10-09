@@ -30,7 +30,7 @@ describe Logux::Node do
   describe '#node_id' do
     subject(:node_id) { node.node_id }
 
-    it('generates nanoid') { expect(node_id).not_to be_empty }
+    it { expect(node_id).to be_present }
 
     it "doesn't change from call to call" do
       expect(node_id).to eq(node.node_id)
