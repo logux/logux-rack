@@ -2,9 +2,9 @@
 
 module Logux
   class ClassFinder
-    attr_reader :action, :meta, :headers
+    include Logux::Utils
 
-    using Logux::Utils
+    attr_reader :action, :meta, :headers
 
     def initialize(action:, meta:, headers:)
       @action = action
@@ -45,7 +45,7 @@ module Logux
     end
 
     def class_path
-      "#{class_namespace}::#{class_name}".underscore
+      underscore("#{class_namespace}::#{class_name}")
     end
 
     def raise_error_for_missing(subject)
