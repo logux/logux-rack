@@ -26,6 +26,9 @@ Metrics/BlockLength:
     - 'logux-rack.gemspec'
     - 'lib/logux/test/helpers.rb'
 
+Metrics/MethodLength:
+  Max: 15
+
 Metrics/ParameterLists:
   CountKeywordArgs: false
 

@@ -25,6 +25,7 @@ module Logux
   ParameterMissingError = Class.new(StandardError)
   RequestError = Class.new(StandardError)
 
+  autoload :Configuration, 'logux/configuration'
   autoload :Client, 'logux/client'
   autoload :Meta, 'logux/meta'
   autoload :Action, 'logux/action'
@@ -56,6 +57,14 @@ module Logux
   end
 
   class << self
+    def configure
+      yield(configuration)
+    end
+
+    def configuration
+      @configuration ||= Logux::Configuration.new
+    end
+
     def add(action, meta = Meta.new)
       Logux::Add.new.call([[action, meta]])
     end
@@ -71,13 +80,7 @@ module Logux
     end
 
     def valid_secret?(meta_params)
-      if configuration.secret.nil?
-        logger.warn(%(Please, add secret for logux server:
-                            Logux.configure do |c|
-                              c.secret = 'your-secret'
-                            end))
-      end
-
+      logger.warn('Please, define Logux server secret') unless configuration.secret
       configuration.secret == meta_params&.dig('secret')
     end
 
