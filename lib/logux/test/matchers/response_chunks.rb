@@ -16,7 +16,6 @@ module Logux
 
         def matches?(actual)
           @actual = JSON.parse(actual.body)
-
           match_includes? && match_excludes?
         end
 

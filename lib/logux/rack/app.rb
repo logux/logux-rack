@@ -18,12 +18,10 @@ module Logux
       end
 
       post LOGUX_ROOT_PATH do
-        begin
-          validate_request!
-          stream { |out| build_response(out) }
-        rescue JSON::ParserError
-          halt(400, ERROR[:body])
-        end
+        validate_request!
+        stream { |out| build_response(out) }
+      rescue JSON::ParserError
+        halt(400, ERROR[:body])
       end
 
       private

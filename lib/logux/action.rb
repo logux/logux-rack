@@ -22,7 +22,6 @@ module Logux
 
     def initialize(parameters = {})
       raise ArgumentError, :parameters unless parameters.is_a?(Hash)
-
       @parameters = parameters.transform_keys(&:to_s)
     end
 

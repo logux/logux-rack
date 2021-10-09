@@ -14,11 +14,14 @@ AllCops:
     - 'tests/test-app/**/*'
     - 'tests/backend-test/**/*'
 
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
 Layout/LineEndStringConcatenationIndentation:
   EnforcedStyle: indented
 
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 
 Metrics/BlockLength:
   Exclude:

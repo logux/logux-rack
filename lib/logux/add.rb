@@ -16,7 +16,6 @@ module Logux
 
     def call(commands)
       return if commands.empty?
-
       prepared_data = prepare_data(commands)
       Logux.logger.debug("Logux add: #{prepared_data}")
       client.post(prepared_data)
@@ -28,16 +27,15 @@ module Logux
       {
         version: PROTOCOL_VERSION,
         secret: secret,
-        commands: commands.map do |command|
-          action = command.first
-          meta = command[1]
+        commands: commands.map { |command| build_command(command) }
+      }
+    end
 
-          {
-            command: 'action',
-            action: action,
-            meta: meta || Meta.new
-          }
-        end
+    def build_command(command)
+      {
+        command: 'action',
+        action: command.first,
+        meta: command[1] || Meta.new
       }
     end
   end

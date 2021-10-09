@@ -42,16 +42,22 @@ module Logux
       def process_action!
         return if stop_process?
 
-        action_caller = Logux::ActionCaller.new(action: action_from_chunk,
-                                                meta: meta_from_chunk,
-                                                headers: headers_from_chunk)
+        action_caller = Logux::ActionCaller.new(
+          action: action_from_chunk,
+          meta: meta_from_chunk,
+          headers: headers_from_chunk
+        )
+
         stream.write(action_caller.call!.format)
       end
 
       def process_authorization!
-        policy_caller = Logux::PolicyCaller.new(action: action_from_chunk,
-                                                meta: meta_from_chunk,
-                                                headers: headers_from_chunk)
+        policy_caller = Logux::PolicyCaller.new(
+          action: action_from_chunk,
+          meta: meta_from_chunk,
+          headers: headers_from_chunk
+        )
+
         policy_check = policy_caller.call!
         status = policy_check ? :approved : :forbidden
         stream.write(answer: status, id: meta_from_chunk.id)
@@ -62,9 +68,11 @@ module Logux
       end
 
       def process_resend!
-        resender = Logux::Resender.new(action: action_from_chunk,
-                                       meta: meta_from_chunk,
-                                       headers: headers_from_chunk)
+        resender = Logux::Resender.new(
+          action: action_from_chunk,
+          meta: meta_from_chunk,
+          headers: headers_from_chunk
+        )
 
         resend_data = resender.call!
         return unless resend_data.present?

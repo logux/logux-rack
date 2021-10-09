@@ -10,18 +10,15 @@ module Logux
           @difference = state_changes_inside { actual.call }
           return !@difference.empty? if expected.empty?
 
-          expected.all? do |ex|
+          expected.all? do |expected|
             @difference.find do |state|
-              state['commands'].any? do |c|
-                match_commands?(c, ex)
-              end
+              state['commands'].any? { |command| match_commands?(command, expected) }
             end
           end
         end
 
         def failure_message
-          "expected that #{pretty(@difference)} to include "\
-            "commands #{pretty(expected)}"
+          "expected that #{pretty(@difference)} to include commands #{pretty(expected)}"
         end
 
         private
@@ -30,20 +27,19 @@ module Logux
           before_state = Logux::Test::Store.instance.data.dup
           yield
           after_state = Logux::Test::Store.instance.data
-
           (after_state - before_state).map { |d| JSON.parse(d) }
         end
 
         def match_commands?(stored_command, expected_command)
           expected_command.each_pair.all? do |key, part|
             part.stringify_keys! if part.is_a?(Hash)
-            matcher = if part.is_a?(RSpec::Matchers::BuiltIn::BaseMatcher)
-                        part
-                      else
-                        RSpec::Matchers::BuiltIn::Eq.new(part)
-                      end
-            matcher.matches?(stored_command[key.to_s])
+            matcher(part).matches?(stored_command[key.to_s])
           end
+        end
+
+        def matcher(part)
+          return part if part.is_a?(RSpec::Matchers::BuiltIn::BaseMatcher)
+          RSpec::Matchers::BuiltIn::Eq.new(part)
         end
       end
     end

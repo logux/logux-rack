@@ -32,18 +32,23 @@ module Logux
 
     def format(response)
       return response if response.is_a?(Logux::Response)
-
       Logux::Response.new(:processed, action: action, meta: meta)
     end
 
     def class_finder
-      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta,
-                                               headers: headers)
+      @class_finder ||= Logux::ClassFinder.new(
+        action: action,
+        meta: meta,
+        headers: headers
+      )
     end
 
     def action_controller
-      class_finder.find_action_class.new(action: action, meta: meta,
-                                         headers: headers)
+      class_finder.find_action_class.new(
+        action: action,
+        meta: meta,
+        headers: headers
+      )
     end
   end
 end

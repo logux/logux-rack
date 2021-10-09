@@ -38,13 +38,11 @@ module Logux
     end
 
     def receivers_for_action
-      @receivers_for_action ||= action_class.receivers_by_action(action.type,
-                                                                 action)
+      @receivers_for_action ||= action_class.receivers_by_action(action.type, action)
     end
 
     def class_finder
-      @class_finder ||= Logux::ClassFinder.new(action: action,
-                                               meta: meta, headers: headers)
+      @class_finder ||= Logux::ClassFinder.new(action: action, meta: meta, headers: headers)
     end
 
     def action_class
