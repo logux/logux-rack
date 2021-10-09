@@ -116,13 +116,15 @@ describe Logux, timecop: true do
     end
 
     describe 'logging' do
-      let(:logger) { double }
+      let(:logger) { instance_double(Logger, warn: true) }
 
-      before { allow(described_class).to receive(:logger).and_return(logger) }
+      before do
+        allow(described_class).to receive(:logger).and_return(logger)
+      end
 
       it 'warn if secret is empty' do
-        expect(logger).to receive(:warn)
         described_class.valid_secret?(secret: nil)
+        expect(logger).to have_received(:warn)
       end
     end
   end
