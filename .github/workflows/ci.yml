@@ -36,33 +36,6 @@ jobs:
       - name: Run RuboCop
         run: bundle exec rubocop --parallel
 
-  reek:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.2
-
-      - name: Cache gems
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: gems-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: gems-${{ runner.os }}-
-
-      - name: Install gems
-        run: |
-          bundle config path vendor/bundle
-          bundle install
-
-      - name: Run Reek
-        run: bundle exec reek --single-line .
-
   test:
     runs-on: ubuntu-latest
 

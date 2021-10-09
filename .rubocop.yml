@@ -1,15 +1,24 @@
 inherit_from: .rubocop_todo.yml
 
-require: rubocop-rspec
+require:
+  - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
   Exclude:
     - 'spec/dummy/db/**/*.rb'
     - 'vendor/**/*'
     - 'gemfiles/*'
     - 'tests/test-app/**/*'
     - 'tests/backend-test/**/*'
-  TargetRubyVersion: 2.4
+
+Layout/LineEndStringConcatenationIndentation:
+  EnforcedStyle: indented
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
 
 Metrics/BlockLength:
   Exclude:
@@ -17,19 +26,22 @@ Metrics/BlockLength:
     - 'logux-rack.gemspec'
     - 'lib/logux/test/helpers.rb'
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 RSpec/DescribeClass:
   Exclude:
     - 'spec/logux/tasks/*.rb'
     - 'spec/requests/*.rb'
 
-FactoryBot/StaticAttributeDefinedDynamically:
-  Enabled: false
-
 RSpec/ExpectChange:
   EnforcedStyle: block
 
-Style/RescueStandardError:
-  EnforcedStyle: implicit
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
 
 Style/DateTime:
+  Enabled: false
+
+Style/Documentation:
   Enabled: false
