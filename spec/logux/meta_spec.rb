@@ -9,21 +9,14 @@ describe Logux::Meta do
 
   describe '#new' do
     context 'with empty meta' do
-      it 'generates id' do
-        expect(meta.id).not_to be nil
-      end
-
-      it 'generates time' do
-        expect(meta.time).not_to be nil
-      end
+      it { expect(meta.id).to be_present }
+      it { expect(meta.time).to be_present }
     end
 
     context 'with id' do
       let(:attributes) { { id: '112 10:uuid 0' } }
 
-      it 'fills time' do
-        expect(meta.time).to eq('112')
-      end
+      it { expect(meta.time).to eq('112') }
     end
 
     context 'with meta' do

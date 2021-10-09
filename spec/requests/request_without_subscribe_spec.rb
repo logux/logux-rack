@@ -19,9 +19,8 @@ describe 'Request logux server without subscribe' do
       let(:channel) { 'notexists/123' }
 
       it 'returns unknownChannel' do
-        expect(JSON.parse(last_response.body)).to include(
-          'answer' => 'unknownChannel', 'id' => '219_856_768 clientid 0'
-        )
+        expect(JSON.parse(last_response.body)).to \
+          include('answer' => 'unknownChannel', 'id' => '219_856_768 clientid 0')
       end
     end
 

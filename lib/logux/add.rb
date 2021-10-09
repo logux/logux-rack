@@ -4,9 +4,11 @@ module Logux
   class Add
     attr_reader :client, :version, :secret
 
-    def initialize(client: Logux::Client.new,
-                   version: Logux::PROTOCOL_VERSION,
-                   secret: Logux.configuration.secret)
+    def initialize(
+      client: Logux::Client.new,
+      version: Logux::PROTOCOL_VERSION,
+      secret: Logux.configuration.secret
+    )
       @client = client
       @version = version
       @secret = secret
@@ -29,7 +31,12 @@ module Logux
         commands: commands.map do |command|
           action = command.first
           meta = command[1]
-          { command: 'action', action: action, meta: meta || Meta.new }
+
+          {
+            command: 'action',
+            action: action,
+            meta: meta || Meta.new
+          }
         end
       }
     end

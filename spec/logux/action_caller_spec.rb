@@ -29,9 +29,7 @@ describe Logux::ActionCaller do
         Actions.send :remove_const, :User
       end
 
-      it 'return ok' do
-        expect(result.status).to eq(:ok)
-      end
+      it { expect(result.status).to eq(:ok) }
     end
   end
 end

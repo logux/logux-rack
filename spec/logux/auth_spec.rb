@@ -22,28 +22,11 @@ describe Logux::Auth do
   let(:auth_id) { 'sample-auth-id' }
 
   describe '#new' do
-    it 'exposes user_id' do
-      expect(auth.user_id).to eq(user_id)
-    end
-
-    it 'exposes token' do
-      expect(auth.token).to eq(token)
-    end
-
-    it 'exposes cookie' do
-      expect(auth.cookie).to eq(cookie)
-    end
-
-    it 'exposes headers' do
-      expect(auth.headers).to eq(headers)
-    end
-
-    it 'exposes subprotocol' do
-      expect(auth.subprotocol).to eq(subprotocol)
-    end
-
-    it 'exposes auth_id' do
-      expect(auth.auth_id).to eq(auth_id)
-    end
+    it { expect(auth.user_id).to eq(user_id) }
+    it { expect(auth.token).to eq(token) }
+    it { expect(auth.cookie).to eq(cookie) }
+    it { expect(auth.headers).to eq(headers) }
+    it { expect(auth.subprotocol).to eq(subprotocol) }
+    it { expect(auth.auth_id).to eq(auth_id) }
   end
 end

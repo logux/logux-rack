@@ -9,9 +9,7 @@ module Logux
     end
 
     def post(params)
-      client.post(params.to_json,
-                  content_type: :json,
-                  accept: :json)
+      client.post(params.to_json, content_type: :json, accept: :json)
     end
 
     def client

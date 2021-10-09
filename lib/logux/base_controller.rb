@@ -25,10 +25,12 @@ module Logux
     end
 
     def respond(status, action: @action, meta: @meta, custom_data: nil)
-      Logux::Response.new(status,
-                          action: action,
-                          meta: meta,
-                          custom_data: custom_data)
+      Logux::Response.new(
+        status,
+        action: action,
+        meta: meta,
+        custom_data: custom_data
+      )
     end
 
     def user_id

@@ -52,8 +52,6 @@ describe Logux::ChannelController do
     let(:empty_controller_class) { Class.new(described_class) }
     let(:empty_controller) { empty_controller_class.new(action: action) }
 
-    it 'is empty' do
-      expect(empty_controller.initial_data).to eq []
-    end
+    it { expect(empty_controller.initial_data).to be_empty }
   end
 end
