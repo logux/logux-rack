@@ -54,6 +54,7 @@ describe Logux::ActionController do
     before do
       local_action_type = action_type.split('/').last
       local_receivers = receivers
+
       described_class.class_eval do
         resend local_action_type, local_receivers
         resend 'not_existing_action', 'another' => 'receivers'

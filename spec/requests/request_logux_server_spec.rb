@@ -11,7 +11,6 @@ describe 'Request logux server' do
     let(:logux_params) { build(:logux_params, secret: 'wrong') }
 
     it { is_expected.to be_forbidden }
-
     it { is_expected.to eq_body(Logux::Rack::App::ERROR[:secret]) }
   end
 
@@ -19,7 +18,6 @@ describe 'Request logux server' do
     subject { post '/logux', '' }
 
     it { is_expected.to be_bad_request }
-
     it { is_expected.to eq_body(Logux::Rack::App::ERROR[:body]) }
   end
 
@@ -27,7 +25,6 @@ describe 'Request logux server' do
     let(:logux_params) { build(:logux_params, protocol_version: -1) }
 
     it { is_expected.to be_bad_request }
-
     it { is_expected.to eq_body(Logux::Rack::App::ERROR[:protocol]) }
   end
 
@@ -36,7 +33,6 @@ describe 'Request logux server' do
       let(:logux_params) { build(:logux_batch_params) }
 
       it { is_expected.to logux_approved('219_856_768 clientid 0') }
-
       it { is_expected.to logux_resent('219_856_768 clientid 0') }
     end
   end

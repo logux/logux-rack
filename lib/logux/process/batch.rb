@@ -58,20 +58,30 @@ module Logux
       end
 
       def preprocess_action(chunk)
-        { type: :action,
+        {
+          type: :action,
           action: Logux::Action.new(chunk['action']),
           meta: Logux::Meta.new(chunk['meta']),
-          headers: chunk['headers'] }
+          headers: chunk['headers']
+        }
       end
 
       def preprocess_auth(chunk)
-        { type: :auth,
-          auth: Logux::Auth.new(user_id: chunk['userId'],
-                                auth_id: chunk['authId'],
-                                subprotocol: chunk['subprotocol'],
-                                token: chunk['token'],
-                                cookie: chunk['cookie'],
-                                headers: chunk['headers']) }
+        {
+          type: :auth,
+          auth: build_auth(chunk)
+        }
+      end
+
+      def build_auth(chunk)
+        Logux::Auth.new(
+          user_id: chunk['userId'],
+          auth_id: chunk['authId'],
+          subprotocol: chunk['subprotocol'],
+          token: chunk['token'],
+          cookie: chunk['cookie'],
+          headers: chunk['headers']
+        )
       end
     end
   end

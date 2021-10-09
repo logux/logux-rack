@@ -17,7 +17,6 @@ module Logux
     def call!
       return nil unless any_receivers?
       return nil unless receivers_for_action?
-
       { answer: 'resend', id: meta['id'] }.merge(receivers_for_action)
     rescue Logux::UnknownActionError, Logux::UnknownChannelError => e
       logger.warn(e)
@@ -28,14 +27,12 @@ module Logux
 
     def any_receivers?
       return true if action_class.respond_to? :receivers_by_action
-
       logger.debug("No resend receivers are set for #{action_class}")
       false
     end
 
     def receivers_for_action?
       return true if receivers_for_action.present?
-
       logger.debug("No resend receivers are set for #{action_class}")
       false
     end

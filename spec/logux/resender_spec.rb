@@ -4,8 +4,13 @@ require 'spec_helper'
 
 describe Logux::Resender do
   let(:resender) do
-    described_class.new(action: action, meta: meta, headers: headers)
+    described_class.new(
+      action: action,
+      meta: meta,
+      headers: headers
+    )
   end
+
   let(:action) { create(:logux_action_add) }
   let(:meta) { create(:logux_meta) }
   let(:headers) { {} }

@@ -10,6 +10,7 @@ describe Logux::ChannelController do
       end
     end
   end
+
   let(:channel_controller) { controller_class.new(action: action, meta: meta) }
   let(:user) { User.find_or_create_by(id: 1, name: 'test') }
   let(:meta) { Logux::Meta.new }
