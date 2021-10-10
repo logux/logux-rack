@@ -5,7 +5,6 @@ require 'json'
 require 'logger'
 require 'nanoid'
 require 'rest-client'
-require 'sinatra/base'
 require 'singleton'
 
 module Logux
