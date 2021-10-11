@@ -24,7 +24,7 @@ module Logux
           ensure
             io.close
           end
-          [200, { 'rack.hijack' => body, 'Content-Type' => 'application/json' }, []]
+          [200, { 'rack.hijack' => body }, []]
         rescue JSON::ParserError
           halt(400, ERROR[:body])
         end
@@ -79,7 +79,11 @@ module Logux
     end
 
     class App
+      class HijackNotAvailable < RuntimeError; end
+
       def self.call(env)
+        raise HijackNotAvailable unless env['rack.hijack']
+
         Service.new(::Rack::Request.new(env)).process
       end
     end

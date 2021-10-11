@@ -30,6 +30,7 @@ module Logux
     autoload :Helpers, 'logux/test/helpers'
     autoload :Store, 'logux/test/store'
     autoload :Matchers, 'logux/test/matchers'
+    autoload :StreamIO, 'logux/test/stream_io'
   end
 end
 
