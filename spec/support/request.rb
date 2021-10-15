@@ -1,7 +1,6 @@
 # frozen_String_literal: true
 
 require 'spec_helper'
-require 'webrick'
 
 shared_context 'with request' do
   subject(:request_logux) { post('/logux', logux_params.to_json, { 'rack.hijack' => true }) }

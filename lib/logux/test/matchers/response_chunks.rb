@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'base'
-require 'rack/lint'
 
 module Logux
   module Test

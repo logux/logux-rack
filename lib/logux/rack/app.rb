@@ -2,8 +2,6 @@
 
 module Logux
   module Rack
-    LOGUX_ROOT_PATH = '/logux'
-
     class Service
       ERROR = {
         attempts: 'Too many wrong secret attempts',
