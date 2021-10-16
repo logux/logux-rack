@@ -2,9 +2,7 @@
 
 module Logux
   module Rack
-    LOGUX_ROOT_PATH = '/logux'
-
-    class App < Sinatra::Base
+    class Service
       ERROR = {
         attempts: 'Too many wrong secret attempts',
         secret: 'Wrong secret',
@@ -12,19 +10,30 @@ module Logux
         body: 'Wrong body'
       }.freeze
 
-      before do
-        request.body.rewind
-        content_type 'application/json'
+      def initialize(request)
+        @request = request
       end
 
-      post LOGUX_ROOT_PATH do
-        validate_request!
-        stream { |out| build_response(out) }
-      rescue JSON::ParserError
-        halt(400, ERROR[:body])
+      def process
+        catch(:halt) do
+          validate_request!
+          body = lambda do |io|
+            build_response(io)
+          ensure
+            io.close
+          end
+          [200, { 'rack.hijack' => body }, []]
+        rescue JSON::ParserError
+          halt(400, ERROR[:body])
+        end
       end
 
       private
+
+      def halt(code, error)
+        response = [code, { 'Content-Type' => 'application/json' }, [error]]
+        throw :halt, response
+      end
 
       def validate_request!
         halt(429, ERROR[:attempts]) unless Logux.throttle.allow_request(request_ip)
@@ -51,7 +60,7 @@ module Logux
       end
 
       def logux_params
-        @logux_params ||= JSON.parse(request.body.read)
+        @logux_params ||= JSON.parse(@request.body.read)
       end
 
       def command_params
@@ -59,11 +68,21 @@ module Logux
       end
 
       def request_ip
-        @request_ip ||= request.ip
+        @request_ip ||= @request.ip
       end
 
       def meta_params
         logux_params&.slice('version', 'secret', 'id')
+      end
+    end
+
+    class App
+      class HijackNotAvailable < RuntimeError; end
+
+      def self.call(env)
+        raise HijackNotAvailable unless env['rack.hijack']
+
+        Service.new(::Rack::Request.new(env)).process
       end
     end
   end

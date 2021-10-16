@@ -15,7 +15,10 @@ module Logux
         end
 
         def matches?(actual)
-          @actual = JSON.parse(actual.body)
+          io = ::Logux::Test::StreamIO.new
+          actual.headers['rack.hijack'].call(io)
+          io.rewind
+          @actual = JSON.parse(io.read)
           match_includes? && match_excludes?
         end
 

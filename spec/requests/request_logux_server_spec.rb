@@ -11,21 +11,24 @@ describe 'Request logux server' do
     let(:logux_params) { build(:logux_params, secret: 'wrong') }
 
     it { is_expected.to be_forbidden }
-    it { is_expected.to eq_body(Logux::Rack::App::ERROR[:secret]) }
+
+    it { is_expected.to eq_body(Logux::Rack::Service::ERROR[:secret]) }
   end
 
   context 'when body is not a json' do
-    subject { post '/logux', '' }
+    subject { post '/logux', '', { 'rack.hijack' => true } }
 
     it { is_expected.to be_bad_request }
-    it { is_expected.to eq_body(Logux::Rack::App::ERROR[:body]) }
+
+    it { is_expected.to eq_body(Logux::Rack::Service::ERROR[:body]) }
   end
 
   context 'when protocol is not supported' do
     let(:logux_params) { build(:logux_params, protocol_version: -1) }
 
     it { is_expected.to be_bad_request }
-    it { is_expected.to eq_body(Logux::Rack::App::ERROR[:protocol]) }
+
+    it { is_expected.to eq_body(Logux::Rack::Service::ERROR[:protocol]) }
   end
 
   context 'when authorization required' do
@@ -33,6 +36,7 @@ describe 'Request logux server' do
       let(:logux_params) { build(:logux_batch_params) }
 
       it { is_expected.to logux_approved('219_856_768 clientid 0') }
+
       it { is_expected.to logux_resent('219_856_768 clientid 0') }
     end
   end
@@ -41,7 +45,9 @@ describe 'Request logux server' do
     let(:logux_params) { build(:logux_batch_params) }
 
     it 'updates store' do
-      expect { request_logux }.to change { logux_store.size }.by(1)
+      expect { request_logux.headers['rack.hijack'].call(Logux::Test::StreamIO.new) }.to change {
+                                                                                           logux_store.size
+                                                                                         }.by(1)
     end
   end
 end
