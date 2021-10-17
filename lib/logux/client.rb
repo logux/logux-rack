@@ -2,18 +2,19 @@
 
 module Logux
   class Client
-    attr_reader :logux_host
+    HEADERS = {
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json'
+    }.freeze
+
+    attr_reader :uri
 
     def initialize(logux_host: Logux.configuration.logux_host)
-      @logux_host = logux_host
+      @uri = URI(logux_host)
     end
 
     def post(params)
-      client.post(params.to_json, content_type: :json, accept: :json)
-    end
-
-    def client
-      @client ||= RestClient::Resource.new(logux_host, verify_ssl: false)
+      Net::HTTP.post(uri, params.to_json, HEADERS)
     end
   end
 end

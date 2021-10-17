@@ -4,7 +4,7 @@ require 'forwardable'
 require 'json'
 require 'logger'
 require 'nanoid'
-require 'rest-client'
+require 'net/http'
 require 'singleton'
 
 module Logux
