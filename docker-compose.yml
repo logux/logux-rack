@@ -16,13 +16,6 @@ services:
       - bundler_data:/bundle
     tmpfs:
       - /tmp
-    depends_on:
-      - db
-
-  db:
-    image: postgres:14
-    environment:
-      - POSTGRES_DB=logux_rack
 
 volumes:
   bundler_data:
