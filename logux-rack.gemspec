@@ -11,10 +11,10 @@ Gem::Specification.new do |spec|
   spec.email         = ['dtopornin@gmail.com', 'alex.musayev@gmail.com']
   spec.summary       = 'Rack application backend for Logux proxy server'
 
-  spec.description   = %(
+  spec.description   = <<~DESCRIPTION.strip.gsub(/\s+/, ' ')
     This gem provides building blocks to integrate Logux server
     interaction features into a Rack-based web applications.
-  ).strip.gsub(/\s+/, ' ')
+  DESCRIPTION
 
   spec.homepage      = 'https://logux.io/'
   spec.license       = 'MIT'
