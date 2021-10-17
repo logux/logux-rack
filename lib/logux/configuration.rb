@@ -20,7 +20,7 @@ module Logux
 
     def initialize
       @secret = nil
-      @logux_host = 'localhost:1338'
+      @logux_host = 'http://localhost:1338'
       @verify_authorized = true
       @logger = ::Logger.new($stdout)
       @on_error = proc {}
