@@ -11,10 +11,10 @@ Gem::Specification.new do |spec|
   spec.email         = ['dtopornin@gmail.com', 'alex.musayev@gmail.com']
   spec.summary       = 'Rack application backend for Logux proxy server'
 
-  spec.description   = %(
+  spec.description   = <<~DESCRIPTION.strip.gsub(/\s+/, ' ')
     This gem provides building blocks to integrate Logux server
     interaction features into a Rack-based web applications.
-  ).strip.gsub(/\s+/, ' ')
+  DESCRIPTION
 
   spec.homepage      = 'https://logux.io/'
   spec.license       = 'MIT'
@@ -22,44 +22,23 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] = 'https://github.com/logux/logux-rack'
   spec.metadata['changelog_uri'] = 'https://github.com/logux/logux-rack/CHANGELOG.md'
 
-  EXCLUDE_PATHS = %w[
-    spec
-  ].freeze
-
-  EXCLUDE_FILES = %w[
-    .gitignore
-    .pryrc
-    .rspec
-    .rubocop.yml
-    .travis.yml
-    Appraisals
-  ].freeze
-
-  EXCLUDE_PATTERN = %r{^(#{EXCLUDE_PATHS.join("|")}/)}.freeze
-
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`
-      .split("\x0")
-      .reject { |f| f.match(EXCLUDE_PATTERN) } - EXCLUDE_FILES
-  end
-
+  spec.files = Dir.glob('{bin,lib}/**/*') + %w[LICENSE.txt README.md CHANGELOG.md]
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'nanoid'
+  spec.add_dependency 'nanoid', '~> 2.0'
   spec.add_dependency 'rack', '~> 2.0'
-  spec.add_dependency 'semantic_range'
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'factory_bot'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'pry-byebug'
-  spec.add_development_dependency 'puma'
-  spec.add_development_dependency 'rack-test'
-  spec.add_development_dependency 'rake', '>= 10.0'
+  spec.add_dependency 'semantic_range', '~> 3.0'
+  spec.add_development_dependency 'bundler', '~> 2.0', '< 3.0'
+  spec.add_development_dependency 'factory_bot', '~> 6.2'
+  spec.add_development_dependency 'pry', '~> 0.14'
+  spec.add_development_dependency 'pry-byebug', '~> 3.8'
+  spec.add_development_dependency 'rack-test', '~> 1.1'
+  spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.8'
   spec.add_development_dependency 'rubocop', '~> 1.22'
   spec.add_development_dependency 'rubocop-rake', '~> 0.6'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.5'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'timecop'
-  spec.add_development_dependency 'webmock'
+  spec.add_development_dependency 'simplecov', '~> 0.21.2'
+  spec.add_development_dependency 'timecop', '~> 0.9.4'
+  spec.add_development_dependency 'webmock', '~> 3.14'
 end
