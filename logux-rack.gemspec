@@ -22,27 +22,7 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] = 'https://github.com/logux/logux-rack'
   spec.metadata['changelog_uri'] = 'https://github.com/logux/logux-rack/CHANGELOG.md'
 
-  EXCLUDE_PATHS = %w[
-    spec
-  ].freeze
-
-  EXCLUDE_FILES = %w[
-    .gitignore
-    .pryrc
-    .rspec
-    .rubocop.yml
-    .travis.yml
-    Appraisals
-  ].freeze
-
-  EXCLUDE_PATTERN = %r{^(#{EXCLUDE_PATHS.join("|")}/)}.freeze
-
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`
-      .split("\x0")
-      .reject { |f| f.match(EXCLUDE_PATTERN) } - EXCLUDE_FILES
-  end
-
+  spec.files = Dir.glob('{bin,lib}/**/*') + %w[LICENSE.txt README.md CHANGELOG.md]
   spec.require_paths = ['lib']
 
   spec.add_dependency 'nanoid'
