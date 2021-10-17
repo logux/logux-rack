@@ -5,24 +5,13 @@ services:
     image: ruby:2
     environment:
       - BUNDLE_PATH=/bundle
-      - BUNDLE_CONFIG=/app/.bundle/config
-      - DB_HOST=db
-      - DB_NAME=logux_rack
-      - DB_USERNAME=postgres
     command: bash
     working_dir: /app
     volumes:
       - .:/app:cached
-      - bundler_data:/bundle
+      - bundle:/bundle
     tmpfs:
       - /tmp
-    depends_on:
-      - db
-
-  db:
-    image: postgres:14
-    environment:
-      - POSTGRES_DB=logux_rack
 
 volumes:
-  bundler_data:
+  bundle:
