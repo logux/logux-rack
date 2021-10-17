@@ -28,7 +28,6 @@ module Logux
   autoload :Client, 'logux/client'
   autoload :Meta, 'logux/meta'
   autoload :Action, 'logux/action'
-  autoload :Actions, 'logux/actions'
   autoload :Auth, 'logux/auth'
   autoload :BaseController, 'logux/base_controller'
   autoload :ActionController, 'logux/action_controller'
