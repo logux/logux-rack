@@ -8,6 +8,7 @@ describe 'rake logux:actions' do
   include_context 'with rake'
 
   let(:path) { "#{Dir.pwd}/**/dummy/logux/actions" }
+
   let(:actions_list) do
     [
       "   action.type Class#method\n",
