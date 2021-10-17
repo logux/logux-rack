@@ -117,7 +117,12 @@ docker-compose run app bundle exec rspec
 Perform [integration test](https://github.com/logux/backend-test):
 
 ```bash
-docker-compose run test
+cd test/app
+bundle exec rails db:reset && bundle exec rails server
+
+# Execute from another terminal:
+cd test
+yarn && npx @logux/backend-test http://server:3000/logux
 ```
 
 Run Rubocop:
