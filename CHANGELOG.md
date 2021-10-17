@@ -6,9 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## Unreleased
 
-- Added Logux protocol 4 support (BREAKING).
-- Changed Logux secret configuration parameter from `password` to `secret`.
-- Changed Rack app root path from `/logux` to `/` to allow mounting on an arbitrary path.
+- Added Logux protocol 4 support (breaking).
+- Changed Logux secret configuration parameter from `password` to `secret` (breaking).
+- Changed Rack app root path from `/logux` to `/` to allow mounting on an arbitrary path (breaking).
+- Removed deprecated `Logux::Actions` class, use `Logux::Action` from now on (breaking).
 - Removed `rest-client` gem dependency.
 - Removed `sinatra` gem dependency.
 - Removed `configurations` gem dependency.
