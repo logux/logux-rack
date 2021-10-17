@@ -19,8 +19,8 @@ require 'rake'
 require 'timecop'
 require 'webmock/rspec'
 
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
-Dir["#{File.dirname(__FILE__)}/dummy/app/logux/**/*.rb"].each { |f| require f }
+Dir["#{__dir__}/support/**/*.rb"].each { |f| require f }
+Dir["#{__dir__}/dummy/app/logux/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

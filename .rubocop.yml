@@ -8,11 +8,10 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 2.7
   Exclude:
-    - 'spec/dummy/db/**/*.rb'
+    - '**/db/**/*.rb'
     - 'vendor/**/*'
     - 'gemfiles/*'
-    - 'tests/test-app/**/*'
-    - 'tests/backend-test/**/*'
+    - '**/bin/*'
 
 Layout/EmptyLineAfterGuardClause:
   Enabled: false

@@ -27,8 +27,8 @@ module Logux
         return true
       end
 
-      first = first_meta['id'].split(' ')
-      second = second_meta['id'].split(' ')
+      first = first_meta['id'].split
+      second = second_meta['id'].split
 
       first_node = first[1]
       second_node = second[1]
