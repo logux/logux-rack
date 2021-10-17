@@ -5,11 +5,7 @@
 
 # Logux::Rack
 
-[![Build Status](https://travis-ci.org/logux/logux-rack.svg?branch=master)](https://travis-ci.org/logux/logux-rack) [![Coverage Status](https://coveralls.io/repos/github/logux/logux-rack/badge.svg?branch=master)](https://coveralls.io/github/logux/logux-rack?branch=master)
-
-Add WebSockets, live-updates and offline-first to any Rack-based application with [Logux](https://logux.io/). It adds [Logux Back-end Protocol](https://logux.io/protocols/backend/spec/) support to Ruby on Rails or any other Rack applications, so you can use Logux Server as a proxy between WebSocket and your web application.
-
-Read [Creating Logux Proxy](https://logux.io/guide/starting/proxy-server/) guide.
+This gem provides Logux back-end protocol support for Rack-based applications, including Ruby on Rails. It enables [Logux Server integration](https://logux.io/guide/starting/proxy-server/) for full-duplex client-server communication.
 
 ## Installation
 
@@ -22,7 +18,7 @@ gem 'logux-rack'
 And then execute:
 
 ```bash
-bundle
+bundle install
 ```
 
 ## Usage
@@ -89,7 +85,6 @@ end
 
 ```ruby
 # config.ru
-
 require 'logux/rack'
 
 app = Rack::Builder.new do
@@ -107,30 +102,25 @@ You can execute `rake logux:actions` to get the list of available action types, 
 
 ## Development with Docker
 
-After checking out the repo, run:
+Install gem dependencies:
 
 ```bash
 docker-compose run app bundle install
 ```
 
-Run tests with:
+Run the specs:
 
 ```bash
 docker-compose run app bundle exec rspec
 ```
 
-Integration tests (folder test):
+Perform [integration test](https://github.com/logux/backend-test):
 
 ```bash
-bundle instal
-bundle exec rails s
-```
-Run [backend test](https://github.com/logux/backend-test)
-```bash
-npx @logux/backend-test http://localhost:3000/logux
+docker-compose run test
 ```
 
-Run RuboCop with:
+Run Rubocop:
 
 ```bash
 docker-compose run app bundle exec rubocop
